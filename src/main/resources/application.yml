@@ -1,0 +1,23 @@
+
+spring:
+    application:
+        name: 'firstdemo'           # 程序name，建议配置，方便统一的服务管理
+        memo: '"\"aflj&%=\''demo'   # 有特殊字符用单引号括起，\不是转义符，单引号用2个单引号表示
+
+    datasource:
+        url: jdbc:mysql://10.2.0.242:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+        username: beinet
+        password: 123456
+    data:
+        mongodb:
+            uri: mongodb://10.2.0.242:27017/test
+
+    jpa:
+        show-sql: true
+        hibernate:
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+server:
+    port: 8081  # 指定内置的Tomcat的默认启动端口

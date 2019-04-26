@@ -1,5 +1,7 @@
 beinet:
-    jsonUrl:
+    # 添加配置，演示http请求读取配置
+    jsonUrl: www.kuaidi100.com
+    userAgent: beinet 1.0
 
 spring:
     application:
@@ -21,10 +23,20 @@ spring:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         open-in-view: false
 
-logging:
-    level:
-        com.beinet.firstpg.httpDemo.JsonGet: debug
-
 server:
     port: 8081  # 指定内置的Tomcat的默认启动端口
-    # 其它server配置参考 https://www.cnblogs.com/javastack/p/9153952.html
+    # 其它server配置 参考 https://www.cnblogs.com/javastack/p/9153952.html
+
+
+logging:
+    level:
+        # 这个配置，指示com.beinet.firstpg.httpDemo.HttpTestDemo 类要输出详细http日志
+        com.beinet.firstpg.httpDemo.HttpTestDemo: debug
+feign:
+    client:
+        config:
+            httpTest:                 # 服务名,就是@FeignClient(name="httpTest"，配置为 default 表示全部
+                connectTimeout: 2000  # 连接超时时间，毫秒
+                readTimeout: 2000     # 读数据超时时间，毫秒
+                loggerLevel: full     # 输出日志的级别
+

@@ -1,6 +1,7 @@
 package com.beinet.firstpg.jobs;
 
 import com.beinet.firstpg.configs.ConfigReader;
+import com.beinet.firstpg.httpDemo.HttpTestDemo;
 import com.beinet.firstpg.mysql.MySqlTest;
 import com.beinet.firstpg.mysql.entity.Users;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 演示计划任务和配置读取.
@@ -30,17 +33,31 @@ public class ScheduleJobs {
     @Autowired
     private MySqlTest mySqlTest;
 
+    @Autowired
+    private HttpTestDemo httpTest;
 
     /**
      * 每秒执行一次的job
      */
     @Scheduled(cron="* * * * * *")
-    public void firstJob(){
-        if(runed)return;runed=true;
+    public void firstJob() {
+        if (runed) return;
+        runed = true;
 
 //        outputConfigs();
+//        testMySql();
 
-        testMySql();
+        // 验证get方法
+        httpTest.DoGet("yuantong", "111111", "youbl");
+        // 验证普通post方法
+        httpTest.DoPost("yuantong", "111111", "a=1&b=2");
+
+        // post对象
+        Map<String, String> para = new HashMap<>();
+        para.put("a", "123");
+        para.put("b", "abc");
+        String obj = httpTest.DoPost("yuantong", "111111", para);
+        log.info(obj);
     }
 
     /**
@@ -85,7 +102,7 @@ public class ScheduleJobs {
         String account = "ybl" + Math.round(Math.random() * 1000000);
         try {
             Users user = mySqlTest.AddUser(account, "水边", "123456");
-            
+
             // 在类上添加注解 @Slf4j，就自动注入一个log成员，可以用于记录日志，默认输出到控制台.
             // 再在resources目录下添加一个logback-spring.xml，就会写入文件日志
             log.info(user.toString());

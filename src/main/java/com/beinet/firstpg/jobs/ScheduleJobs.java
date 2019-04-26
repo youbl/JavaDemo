@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
  * 也可以添加在main函数的类上
  */
 @Component
-@Slf4j
+@Slf4j // 日志对象注解
 @EnableScheduling
 public class ScheduleJobs {
     private boolean runed;
@@ -35,11 +35,11 @@ public class ScheduleJobs {
      * 每秒执行一次的job
      */
     @Scheduled(cron="* * * * * *")
-    public void firstJob() {
-        if (runed) return;
-        runed = true;
+    public void firstJob(){
+        if(runed)return;runed=true;
 
 //        outputConfigs();
+
         testMySql();
     }
 
@@ -83,7 +83,15 @@ public class ScheduleJobs {
     void testMySql(){
         // 插入数据
         String account = "ybl" + Math.round(Math.random() * 1000000);
-        Users user = mySqlTest.AddUser(account, "水边", "123456");
-        log.info(user.toString());
+        try {
+            Users user = mySqlTest.AddUser(account, "水边", "123456");
+            
+            // 在类上添加注解 @Slf4j，就自动注入一个log成员，可以用于记录日志，默认输出到控制台.
+            // 再在resources目录下添加一个logback-spring.xml，就会写入文件日志
+            log.info(user.toString());
+        }catch (Exception exp){
+            // 记录错误级别日志
+            log.error(exp.toString());
+        }
     }
 }

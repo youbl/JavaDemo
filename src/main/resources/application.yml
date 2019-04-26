@@ -1,3 +1,5 @@
+beinet:
+    jsonUrl:
 
 spring:
     application:
@@ -17,7 +19,12 @@ spring:
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        open-in-view: false
 
+logging:
+    level:
+        com.beinet.firstpg.httpDemo.JsonGet: debug
 
 server:
     port: 8081  # 指定内置的Tomcat的默认启动端口
+    # 其它server配置参考 https://www.cnblogs.com/javastack/p/9153952.html

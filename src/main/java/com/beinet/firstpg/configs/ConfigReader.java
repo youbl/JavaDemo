@@ -1,10 +1,25 @@
 package com.beinet.firstpg.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ConfigReader {
+    @Autowired
+    Environment env;
+
+    /**
+     * 通过 Environment 类读取配置
+     * @param configName 配置名，如 "spring.application.name"
+     * @return 配置值
+     */
+    public String getConfig(String configName) {
+        return env.getProperty(configName);
+    }
+
+
     /**
      * 读取字符串，默认值空
      */

@@ -20,7 +20,7 @@ public class Users {
     private String pwd;
 
     @Column(insertable = false, updatable = false) // 该字段禁止插入和更新，由数据库决定
-    private LocalDateTime createTime;
+    private LocalDateTime creationTime;
     @Column(insertable = false, updatable = false)
     private LocalDateTime lastModificationTime;
 }

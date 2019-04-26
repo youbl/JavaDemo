@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @Slf4j
 public class MySqlTest {
@@ -23,4 +26,27 @@ public class MySqlTest {
         user = usersRepository.save(user);
         return user;
     }
+
+    public Users GetUserByAccount(String account){
+        return usersRepository.findByAccount(account);
+    }
+
+    /**
+     * 返回所有用户数据
+     * @return 用户列表
+     */
+    public List<Users> GetUsers(){
+        return usersRepository.findAll();
+    }
+
+    /**
+     * 返回最近7天创建的用户数据
+     */
+    public List<Users> GetUsersByWeek(){
+        LocalDateTime time1 = LocalDateTime.now();
+        LocalDateTime time2 = time1.minusDays(7);
+        return usersRepository.findAllByCreationTimeAfterAndCreationTimeAfterOrderByAccountDesc(time2, time1);
+    }
+
+
 }

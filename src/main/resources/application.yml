@@ -30,12 +30,12 @@ server:
 
 logging:
     level:
-        # 这个配置，指示com.beinet.firstpg.httpDemo.HttpTestDemo 类要输出详细http日志
-        com.beinet.firstpg.httpDemo.HttpTestDemo: debug
+        # 这个配置，指示com.beinet.firstpg.httpDemo.FeignDemo 类要输出详细http日志
+        com.beinet.firstpg.httpDemo.FeignDemo: debug
 feign:
     client:
         config:
-            httpTest:                 # 服务名,就是@FeignClient(name="httpTest"，配置为 default 表示全部
+            default:                  # 服务名,就是@FeignClient(name="httpTest"，配置为 default 表示全部
                 connectTimeout: 2000  # 连接超时时间，毫秒
                 readTimeout: 2000     # 读数据超时时间，毫秒
                 loggerLevel: full     # 输出日志的级别

@@ -5,7 +5,7 @@ import feign.RequestTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FeignInterceptor  {
+public class FeignInterceptor implements RequestInterceptor {
 
     /**
      * 实现接口 RequestInterceptor，在这个方法里添加全局Header

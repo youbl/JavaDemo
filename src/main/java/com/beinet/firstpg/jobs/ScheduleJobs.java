@@ -1,7 +1,7 @@
 package com.beinet.firstpg.jobs;
 
 import com.beinet.firstpg.configs.ConfigReader;
-import com.beinet.firstpg.httpDemo.HttpTestDemo;
+import com.beinet.firstpg.httpDemo.FeignDemo;
 import com.beinet.firstpg.mysql.MySqlTest;
 import com.beinet.firstpg.mysql.entity.Users;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 演示计划任务和配置读取.
@@ -34,7 +32,8 @@ public class ScheduleJobs {
     private MySqlTest mySqlTest;
 
     @Autowired
-    private HttpTestDemo httpTest;
+    private FeignDemo httpTest;
+
 
     /**
      * 每秒执行一次的job
@@ -44,20 +43,9 @@ public class ScheduleJobs {
         if (runed) return;
         runed = true;
 
-//        outputConfigs();
+        outputConfigs();
+
 //        testMySql();
-
-        // 验证get方法
-        httpTest.DoGet("yuantong", "111111", "youbl");
-        // 验证普通post方法
-        httpTest.DoPost("yuantong", "111111", "a=1&b=2");
-
-        // post对象
-        Map<String, String> para = new HashMap<>();
-        para.put("a", "123");
-        para.put("b", "abc");
-        String obj = httpTest.DoPost("yuantong", "111111", para);
-        log.info(obj);
     }
 
     /**

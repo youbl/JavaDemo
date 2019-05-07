@@ -12,8 +12,8 @@ controller/MainController
 jobs/ScheduleJobs
 
 - mysql读写演示：  
-mysql/MySqlTest
-
+mysql/MySqlTest  
+有JPA操作和Jdbc批量插入2类Demo
 
 - HttpURLConnection封装和请求演示：  
 /test/java/com.beinet.firstpg/httpTest/HttpHelperTest  

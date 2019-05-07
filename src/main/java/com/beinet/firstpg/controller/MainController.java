@@ -1,6 +1,6 @@
 package com.beinet.firstpg.controller;
 
-import com.beinet.firstpg.mysql.MySqlTest;
+import com.beinet.firstpg.mysql.MySqlService;
 import com.beinet.firstpg.mysql.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("")
 public class MainController {
     @Autowired
-    MySqlTest mySqlTest;
+    MySqlService mySqlTest;
 
     /**
      * http://localhost:8081/

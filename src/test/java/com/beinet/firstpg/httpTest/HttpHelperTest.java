@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class HttpHelperTest extends BaseTest {
-    private String url = "https://beinet.cn/";
+    private String url = "https://www.baidu.com/";
     private String param = "a=1&b我是中国人bb&cc=联通df&=4d";
 
     /**
@@ -45,7 +45,7 @@ public class HttpHelperTest extends BaseTest {
         HttpHelper.Config config = new HttpHelper.Config();
         config.setFollowRedirect(true);
         config.setShowHeader(true);
-        config.setProxy("127.0.0.1:8888"); // 加代理，可以用Fiddler看请求情况是否符合要求
+//        config.setProxy("127.0.0.1:8888"); // 加代理，可以用Fiddler看请求情况是否符合要求
         config.setMethod("POST");
         // POST 不带参数
         String str = HttpHelper.GetPage(url, config);

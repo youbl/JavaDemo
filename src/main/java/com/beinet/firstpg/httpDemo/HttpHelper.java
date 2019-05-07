@@ -201,8 +201,8 @@ public class HttpHelper {
         config.setCatchExp(true);
 
         // todo: 要注释
-        config.setShowHeader(true);
-        config.setProxy("127.0.0.1:8888");
+//        config.setShowHeader(true);
+//        config.setProxy("127.0.0.1:8888");
 
         return config;
     }

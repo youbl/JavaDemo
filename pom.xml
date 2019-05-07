@@ -6,10 +6,11 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.beinet.firstpg</groupId>
     <artifactId>beinet-firstpg</artifactId>
+    <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>beinet-firstpg</name>
     <description>beinet's first pg</description>
@@ -85,10 +86,12 @@
     </dependencies>
 
     <build>
+        <finalName>beinet-firstpg</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions><execution><goals><goal>repackage</goal></goals></execution></executions>
             </plugin>
         </plugins>
     </build>

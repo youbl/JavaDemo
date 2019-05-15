@@ -83,6 +83,11 @@
             <version>3.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.beinet.firstmaven</groupId>
+            <artifactId>beinet-first-mavenproj</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

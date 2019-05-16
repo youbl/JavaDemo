@@ -26,4 +26,6 @@ mysql/MySqlTest
 - 数组排序方法演示：  
 /test/java/com.beinet.firstpg/arrayTest/ArrayTest.java
 
+- Redis读写演示
+/test/java/com.beinet.firstpg/redisTest/RedisTest.java
 

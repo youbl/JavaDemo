@@ -17,7 +17,7 @@ public class BaseTest {
     }
 
 
-    public static void out(String msg){
+    public static void out(Object msg){
         System.out.println(LocalDateTime.now() + " " + msg);
     }
 }

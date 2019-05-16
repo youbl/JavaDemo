@@ -23,3 +23,7 @@ mysql/MySqlTest
 /test/java/com.beinet.firstpg/httpTest/FeignTest  
 注：不支持301/302，但支持Eureka服务名调用
 
+- 数组排序方法演示：  
+/test/java/com.beinet.firstpg/arrayTest/ArrayTest.java
+
+

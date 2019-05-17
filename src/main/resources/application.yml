@@ -8,13 +8,26 @@ spring:
         name: 'firstdemo'           # 程序name，建议配置，方便统一的服务管理
         memo: '"\"aflj&%=\''demo'   # 有特殊字符用单引号括起，\不是转义符，单引号用2个单引号表示
 
+    # mysql连接信息配置
     datasource:
         url: jdbc:mysql://10.2.0.242:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
         username: beinet
         password: 123456
-    data:
-        mongodb:
-            uri: mongodb://10.2.0.242:27017/test
+        driver-class-name: com.mysql.jdbc.Driver
+        # 使用Druid数据库连接池
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+            # 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时
+            initial-size: 8
+            # 最小连接池数量
+            min-idle: 5
+            # 最大连接池数量
+            max-active: 10
+            query-timeout: 6000
+            transaction-query-timeout: 6000
+            remove-abandoned-timeout: 1800
+
+    # jpa相关参数配置
     jpa:
         show-sql: true
         hibernate:
@@ -22,6 +35,9 @@ spring:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         open-in-view: false
 
+    data:
+        mongodb:
+            uri: mongodb://10.2.0.242:27017/test
     redis:
         url: redis://Ybl...123@127.0.0.1:6378
         database: 1            # 数据库索引

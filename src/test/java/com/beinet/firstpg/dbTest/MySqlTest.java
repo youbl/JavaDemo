@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,5 +63,27 @@ public class MySqlTest extends BaseTest {
 
         int insNum = mysql.BatchInsert(arr);
         Assert.assertEquals(insNum, 3);
+    }
+
+
+
+    @Test
+    public void TestCustomGet() throws SQLException {
+        List<String[]> arr1 = mysql.Execute("select * from users");
+        List<String[]> arr2 = mysql.Execute2("select * from users");
+        Assert.assertEquals(arr1.size(), arr2.size());
+
+        for (String[] row : arr1){
+            for (String cell : row)
+                System.out.print(cell + ",");
+            System.out.println();
+        }
+        System.out.println("====================");
+        for (String[] row : arr2){
+            for (String cell : row)
+                System.out.print(cell + ",");
+            System.out.println();
+        }
+
     }
 }

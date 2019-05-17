@@ -1,12 +1,16 @@
 package com.beinet.firstpg.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ConfigReader {
-//    @Autowired
-//    org.springframework.core.env.Environment env;
+    static org.springframework.core.env.Environment env;
+    @Autowired
+    public ConfigReader(org.springframework.core.env.Environment env){
+        ConfigReader.env = env;
+    }
 
     /**
      * 通过 System 类读取配置
@@ -14,16 +18,16 @@ public class ConfigReader {
      * @param defaultValue 为空时的默认值
      * @return 配置值
      */
-    public String getConfig(String configName, String defaultValue) {
-        // env.getProperty(k) 等效于 System.getProperty(k)
-        return System.getProperty(configName, defaultValue);
+    public static String getConfig(String configName, String defaultValue) {
+        // System.getProperty(k)是读取系统属性，读不到配置内容
+        return env.getProperty(configName, defaultValue);
     }
     /**
      * 通过 System 类读取配置
      * @param configName 配置名，如 "spring.application.name"
      * @return 配置值
      */
-    public String getConfig(String configName) {
+    public static String getConfig(String configName) {
         return getConfig(configName, "");
     }
 
@@ -32,7 +36,7 @@ public class ConfigReader {
      * @param configName 配置名
      * @return 整数配置值
      */
-    public int getInt(String configName) {
+    public static int getInt(String configName) {
         return getInt(configName, 0);
     }
 
@@ -42,7 +46,7 @@ public class ConfigReader {
      * @param defaultValue 为空时的默认值
      * @return 整数配置值
      */
-    public int getInt(String configName, int defaultValue) {
+    public static int getInt(String configName, int defaultValue) {
         String str = getConfig(configName);
         if (str == null || (str = str.trim()).length() == 0)
             return defaultValue;
@@ -55,7 +59,7 @@ public class ConfigReader {
      * @param configName 配置名
      * @return 整数配置值
      */
-    public boolean getBool(String configName) {
+    public static boolean getBool(String configName) {
         return getBool(configName, false);
     }
 
@@ -65,7 +69,7 @@ public class ConfigReader {
      * @param defaultValue 为空时的默认值
      * @return 整数配置值
      */
-    public boolean getBool(String configName, boolean defaultValue) {
+    public static boolean getBool(String configName, boolean defaultValue) {
         String str = getConfig(configName);
         if (str == null || (str = str.trim()).length() == 0)
             return defaultValue;

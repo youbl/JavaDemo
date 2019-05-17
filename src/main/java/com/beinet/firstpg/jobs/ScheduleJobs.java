@@ -39,14 +39,18 @@ public class ScheduleJobs {
         if (runed) return;
         runed = true;
 
-        // 注: System.getProperties()的key和value，可以在application.yml里配置，也可以通过命令行 java -Dkey=value来设置
-        System.out.println("==================");
-        System.getenv().forEach((k, v) -> System.out.println(k + "===" + v));
-        System.out.println("==================");
-        System.getProperties().forEach((k, v) -> System.out.println(k + "===" + v));//  + "===" + env.getProperty(k.toString())
-        System.out.println("==================");
+//        // 注: System.getProperties()的key和value，可以在application.yml里配置，也可以通过命令行 java -Dkey=value来设置
+//        System.out.println("==================");
+//        System.getenv().forEach((k, v) -> System.out.println(k + "===" + v));
+//        System.out.println("==================");
+//        System.getProperties().forEach((k, v) -> System.out.println(k + "===" + v));//  + "===" + env.getProperty(k.toString())
+//        System.out.println("==================");
 
-//        outputConfigs();
+        String key = "spring.datasource.driver-class-name";
+        String val = ConfigReader.getConfig(key);
+        log.info(key + "===" + val);
+
+        outputConfigs();
     }
 
     /*

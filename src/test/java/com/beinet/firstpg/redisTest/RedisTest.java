@@ -3,12 +3,15 @@ package com.beinet.firstpg.redisTest;
 
 import com.beinet.firstpg.BaseTest;
 import com.beinet.firstpg.redisDemo.RedisHelper;
+import lombok.Data;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 // RedisHelper要注入，所以要用 SpringBootTest
 @SpringBootTest
@@ -86,5 +89,36 @@ public class RedisTest  extends BaseTest {
         Assert.assertEquals(ret, null);
         out(ret);
 
+    }
+
+
+    @Test
+    public void TestCache() throws Exception {
+        String key = "abc";
+        String name = "xxx";
+        for (int i = 0; i < 7; i++) {
+            Emp emp = RedisHelper.getCache(key, 10, () -> {
+                Emp tmp = new Emp();
+                tmp.setAddr("fj");
+                tmp.setAge(123);
+                tmp.setName(name);
+                tmp.setAddTime(LocalDateTime.now());
+                return tmp;
+            }, false);
+            Assert.assertEquals(emp.getName(), "xxx");
+            out(emp);
+            Thread.sleep(2000);
+        }
+    }
+
+    /**
+     * 从Redis反序列化的子类，必须是static的
+     */
+    @Data
+    static class Emp {
+        private String name;
+        private int age;
+        private String addr;
+        private LocalDateTime addTime;
     }
 }

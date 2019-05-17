@@ -13,7 +13,7 @@ spring:
         url: jdbc:mysql://10.2.0.242:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
         username: beinet
         password: 123456
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         # 使用Druid数据库连接池
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
@@ -39,7 +39,7 @@ spring:
         mongodb:
             uri: mongodb://10.2.0.242:27017/test
     redis:
-        url: redis://Ybl...123@127.0.0.1:6378
+        url: redis://ybl123@10.2.0.242:6379
         database: 1            # 数据库索引
         ssl: false
         timeout: 1000          # 连接超时时间（毫秒）

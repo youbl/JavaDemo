@@ -16,16 +16,18 @@ public class FileHelperTest extends BaseTest {
         // 测试前删除，确保不存在
         FileHelper.delete(filename);
 
-        String content = "我是测试的中文文本";
+        String content = "我是测试的中文文本\r\n换一个行";
         // 文件不存在时写入
-        FileHelper.write(filename, content, "GBK", false);
+        FileHelper.write(filename, content);
         String readStr = FileHelper.read(filename);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content, readStr);
 
         // 文件存在时覆盖写入
         content = "我是测试的覆盖中文文本";
         FileHelper.write(filename, content);
         readStr = FileHelper.read(filename);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content, readStr);
 
         // 删除文件
@@ -33,15 +35,17 @@ public class FileHelperTest extends BaseTest {
         Assert.assertEquals(false, new File(filename).exists());
 
         // 文件不存在时追加写入
-        content = "我是测试的append中文文本";
+        content = "我是测试的append中文文本\r\n换一个行";
         FileHelper.append(filename, content);
         readStr = FileHelper.read(filename);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content, readStr);
 
         // 文件存在时追加写入
         String content2 = "我是测试的append中文文本";
         FileHelper.append(filename, content2);
         readStr = FileHelper.read(filename);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content + content2, readStr);
     }
 
@@ -53,16 +57,18 @@ public class FileHelperTest extends BaseTest {
         // 测试前删除，确保不存在
         FileHelper.delete(filename);
 
-        String content = "我是测试的中文文本";
+        String content = "我是测试的中文文本\r\n换一个行";
         // 文件不存在时写入
         FileHelper.write(filename, content, encoding, false);
         String readStr = FileHelper.read(filename, encoding);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content, readStr);
 
         // 文件存在时覆盖写入
         content = "我是测试的覆盖中文文本";
         FileHelper.write(filename, content, encoding, false);
         readStr = FileHelper.read(filename, encoding);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content, readStr);
 
         // 删除文件
@@ -70,15 +76,17 @@ public class FileHelperTest extends BaseTest {
         Assert.assertEquals(false, new File(filename).exists());
 
         // 文件不存在时追加写入
-        content = "我是测试的append中文文本";
+        content = "我是测试的append中文文本\r\n换一个行";
         FileHelper.write(filename, content, encoding, true);
         readStr = FileHelper.read(filename, encoding);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content, readStr);
 
         // 文件存在时追加写入
         String content2 = "我是测试的append中文文本";
         FileHelper.write(filename, content2, encoding, true);
         readStr = FileHelper.read(filename, encoding);
+        out("读取内容： " + readStr);
         Assert.assertEquals(content + content2, readStr);
     }
 }

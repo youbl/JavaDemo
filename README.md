@@ -13,7 +13,7 @@ jobs/ScheduleJobs
 
 - mysql读写演示：  
 mysql/MySqlTest  
-有JPA操作和Jdbc批量插入2类Demo
+有JPA操作 和 Jdbc批量插入2类Demo
 
 - HttpURLConnection封装和请求演示：  
 /test/java/com.beinet.firstpg/httpTest/HttpHelperTest  
@@ -29,3 +29,5 @@ mysql/MySqlTest
 - Redis读写演示
 /test/java/com.beinet.firstpg/redisTest/RedisTest.java
 
+- 文件读取、写入、覆盖演示（带编码）：
+/test/java/com.beinet.firstpg/fileTest/FileHelperTest.java

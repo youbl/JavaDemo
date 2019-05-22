@@ -1,12 +1,14 @@
 beinet:
     # 添加配置，演示http请求读取配置
     jsonUrl: www.kuaidi100.com
-    userAgent: beinet 1.0
+    userAgent: beine:#t 1.0
+    ab#c: "de\"f"#dfd
 
 spring:
     application:
-        name: 'firstdemo'           # 程序name，建议配置，方便统一的服务管理
-        memo: '"\"aflj&%=\''demo'   # 有特殊字符用单引号括起，\不是转义符，单引号用2个单引号表示
+        name: "firstdemo"         # 程序name，建议配置，方便统一的服务管理
+        memo: '"\"afj&%\n=''demo' # 用单引号括起时，\不是转义符，\n是\和n 两个字符，单引号用''(2个单引号)表示
+        mem2: "aaa\"d\ndemo"      # 用双引号括起时，\是转义符，\n是1个字符（换行）
 
     # mysql连接信息配置
     datasource:

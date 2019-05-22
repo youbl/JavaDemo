@@ -2,8 +2,11 @@
 初学Java的Demo演示程序
 
 - 配置读取演示：  
-configs/ConfigReader:   
-读取application.yml里的配置数据, 并在jobs/ScheduleJobs.outputConfigs方法里输出展示。  
+configs/ConfigReader: 依赖于Spring Boot，  
+　　读取application.yml里的配置数据。
+configs/ConfigHelper: 独立，不依赖Spring  
+　　读取application.yml里的配置数据。　　
+configs/YmlHelper: Yml解析工具    
 
 - WebSite的Controller使用演示：  
 controller/MainController

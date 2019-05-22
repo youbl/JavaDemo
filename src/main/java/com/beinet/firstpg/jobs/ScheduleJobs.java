@@ -46,6 +46,11 @@ public class ScheduleJobs {
 //        System.getProperties().forEach((k, v) -> System.out.println(k + "===" + v));//  + "===" + env.getProperty(k.toString())
 //        System.out.println("==================");
 
+        log.info("beinet.userAgent -> "+ConfigReader.getConfig("beinet.userAgent"));
+        log.info("beinet.ab#c -> "+ConfigReader.getConfig("beinet.ab#c"));
+        log.info("spring.application.memo -> "+ConfigReader.getConfig("spring.application.memo"));
+        log.info("spring.application.mem2 -> "+ConfigReader.getConfig("spring.application.mem2"));
+
         String key = "spring.datasource.driver-class-name";
         String val = ConfigReader.getConfig(key);
         log.info(key + "===" + val);

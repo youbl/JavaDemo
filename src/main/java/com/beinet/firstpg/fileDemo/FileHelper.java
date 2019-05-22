@@ -38,6 +38,18 @@ public class FileHelper {
         }
     }
 
+
+    /**
+     * 读取流的UTF-8内容返回
+     *
+     * @param is 流
+     * @return 流的内容
+     * @throws IOException 异常
+     */
+    public static String read(InputStream is) throws IOException {
+        return read(is, defaultEncoding);
+    }
+
     /**
      * 读取流的内容返回
      *
@@ -55,9 +67,8 @@ public class FileHelper {
             // BufferedReader bufferedReader = new BufferedReader(reader)
             // while ((line = bufferedReader.readLine()) != null)
             int c;
-            while ((c = reader.read()) != -1) {
+            while ((c = reader.read()) != -1)
                 sb.append((char) c);
-            }
         }
         return sb.toString();
     }
@@ -65,6 +76,7 @@ public class FileHelper {
     // </editor-fold>
 
     // <editor-fold desc="写方法">
+
     /**
      * 写入文件，如果存在则覆盖
      *
@@ -142,6 +154,7 @@ public class FileHelper {
 
     /**
      * 删除指定文件
+     *
      * @param fileName 文件路径
      */
     public static void delete(String fileName) {

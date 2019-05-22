@@ -370,7 +370,7 @@ public class HttpHelper {
 
     private static String GetResponse(HttpURLConnection connection) throws IOException {
         InputStream is = null;
-        BufferedReader br = null;
+        InputStreamReader reader = null;
         try {
             int code = connection.getResponseCode();
             if (code <= 399) {
@@ -385,16 +385,16 @@ public class HttpHelper {
             if(contentEncoding != null && contentEncoding.equals("gzip")) {
                 is = new GZIPInputStream(is);
             }
-            br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-            // 存放数据
+
+            // 这里不用BufferReader.readLine 避免自己加换行
+            reader = new InputStreamReader(is, StandardCharsets.UTF_8);
             StringBuilder sb = new StringBuilder();
-            String temp;
-            while ((temp = br.readLine()) != null) {
-                sb.append(temp).append("\r\n");
-            }
+            int c;
+            while ((c = reader.read()) != -1)
+                sb.append((char) c);
             return sb.toString();
         } finally {
-            Close(br, is);
+            Close(reader, is);
         }
     }
 

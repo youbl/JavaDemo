@@ -32,5 +32,8 @@ mysql/MySqlTest
 - Redis读写演示
 /test/java/com.beinet.firstpg/redisTest/RedisTest.java
 
-- 文件读取、写入、覆盖演示（带编码）：
-/test/java/com.beinet.firstpg/fileTest/FileHelperTest.java
+- 文件读取、写入、覆盖演示（带字符编码格式）：
+/test/java/com.beinet.firstpg/fileTest/FileHelperTest.java  
+
+- RabbitMQ创建交换器、队列、生产消息、消费消息演示：
+/test/java/com.beinet.firstpg/mqTest/RabbitMQTest.java

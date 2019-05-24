@@ -6,6 +6,8 @@ import com.rabbitmq.client.impl.recovery.AutorecoveringChannel;
 import lombok.Data;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
@@ -24,25 +26,50 @@ public class RabbitMQPool {
     AmqpAdmin admin;
     RabbitTemplate rabbitTemplate;
 
-//    /**
-//     * 手工创建 RabbitTemplate的方法
-//     * @return
-//     */
-//    RabbitTemplate xx(){
-//        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-//        connectionFactory.setAddresses("10.2.0.242:5672");
-//        connectionFactory.setUsername("admin");
-//        connectionFactory.setPassword("admin");
-//        connectionFactory.setVirtualHost("/");
-//        connectionFactory.setPublisherConfirms(true); //必须要设置
-//
-//        RabbitTemplate template = new RabbitTemplate(connectionFactory);
-//        return template;
-//    }
 
+
+    /**
+     * 注入用的构造函数
+     *
+     * @param admin          创建交换器或队列的辅助类对象
+     * @param rabbitTemplate 生产消费的辅助类对象
+     */
     @Autowired
     public RabbitMQPool(AmqpAdmin admin, RabbitTemplate rabbitTemplate) {
-        // 设置生产者Confirm方法，注意要在配置里开启 publisher-confirms: true
+        this.admin = admin;
+        this.rabbitTemplate = rabbitTemplate;
+
+        init();
+    }
+
+    /**
+     * 根据参数自行构建，不依赖注入
+     *
+     * @param host     主机IP或主机名
+     * @param port     端口，小于1时，默认5672
+     * @param username 用户名
+     * @param password 密码
+     */
+    public RabbitMQPool(String host, int port, String username, String password) {
+        if (port <= 0) port = 5672;
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setAddresses(host + ":" + String.valueOf(port));
+        connectionFactory.setUsername(username);
+        connectionFactory.setPassword(password);
+        connectionFactory.setVirtualHost("/");
+
+        rabbitTemplate = new RabbitTemplate(connectionFactory);
+        admin = new RabbitAdmin(connectionFactory);
+
+        init();
+    }
+
+    private void init() {
+        // 设置生产者Confirm方法，在配置里开启 publisher-confirms: true,或这里执行setPublisherConfirms
+        ConnectionFactory conn = rabbitTemplate.getConnectionFactory();
+        if(conn instanceof CachingConnectionFactory)
+            ((CachingConnectionFactory)conn).setPublisherConfirms(true);
+
         // confirm(@Nullable CorrelationData var1, boolean var2, @Nullable String var3)
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             // 发送到交换器失败时，ack为false。
@@ -53,11 +80,7 @@ public class RabbitMQPool {
             System.out.println(correlationData);
             System.out.println(cause);
         });
-
-        this.admin = admin;
-        this.rabbitTemplate = rabbitTemplate;
     }
-
     // <editor-fold desc="创建交换器或队列的方法">
 
 
@@ -245,11 +268,12 @@ public class RabbitMQPool {
 
     /**
      * 启动消息监听
-     * @param queueName 要监听的队列名
+     *
+     * @param queueName     要监听的队列名
      * @param prefetchCount 预取消息数，小于1时取值默认5
-     * @param callback 消息处理方法
-     * @param objClass 消息对象类型
-     * @param <T> 对象
+     * @param callback      消息处理方法
+     * @param objClass      消息对象类型
+     * @param <T>           对象
      */
     public <T> void waitMsg(String queueName, int prefetchCount, MsgCallback<T> callback, Class<T> objClass) {
         prefetchCount = prefetchCount <= 0 ? 5 : prefetchCount;
@@ -279,7 +303,6 @@ public class RabbitMQPool {
         public void onMessage(Message message, Channel channel) throws Exception {
             MessageProperties properties = message.getMessageProperties();
             try {
-//                objClass = objClass == null ? String.class : objClass;
                 T obj = SerializeHelper.deserialize(message.getBody(), objClass);
                 callback.callback(obj, properties.getReceivedRoutingKey(), properties.getHeaders());
             } finally {

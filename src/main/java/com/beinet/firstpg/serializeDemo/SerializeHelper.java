@@ -1,6 +1,7 @@
 package com.beinet.firstpg.serializeDemo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -9,6 +10,12 @@ import java.nio.charset.Charset;
 public class SerializeHelper {
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
+    static {
+        // 反序列化支持需要配置，否则会报错：autoType is not support.
+        // 因为有过安全漏洞，不建议全局开启AutoType，https://www.jianshu.com/p/a92ecc33fd0d
+        // ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+        ParserConfig.getGlobalInstance().addAccept("com.beinet.");
+    }
 
     /**
      * 序列化为字符串

@@ -56,7 +56,7 @@ spring:
         port: 5672
         username: admin
         password: admin
-        publisher-confirms: true
+#        publisher-confirms: true # 代码里去设置true了
 #        virtual-host:
 
 server:

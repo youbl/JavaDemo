@@ -39,7 +39,13 @@ spring:
 
     data:
         mongodb:
-            uri: mongodb://10.2.0.242:27017/test
+            #            uri: mongodb://10.2.0.242:27017/test
+            host: 10.2.0.242
+            port: 27017
+            username: admin
+            password: Ybl..123
+            database: admin
+
     redis:
 #        url: redis://Ybl...123@10.2.0.242:6378
         host: 10.2.0.242

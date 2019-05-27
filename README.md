@@ -37,3 +37,6 @@ mysql/MySqlTest
 
 - RabbitMQ创建交换器、队列、生产消息、消费消息演示：
 /test/java/com.beinet.firstpg/mqTest/RabbitMQTest.java
+
+- MongoDB读取、写入、更新 演示：
+/test/java/com/beinet/firstpg/mongoTest/MongoTest.java

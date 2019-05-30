@@ -22,6 +22,9 @@
         </encoder>
     </appender>
 
+    <!-- 关闭kafka日志，仅适用于开启spring boot -->
+    <logger name="org.apache.kafka" level="OFF"/>
+
     <root level="info">
         <appender-ref ref="console" />
         <appender-ref ref="file" />

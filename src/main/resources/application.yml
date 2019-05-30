@@ -69,6 +69,24 @@ spring:
         password: admin
 #        publisher-confirms: true # 代码里去设置true了
 #        virtual-host:
+    kafka:
+        bootstrap-servers: 10.2.0.242:9092
+        template:
+            default-topic: mytesttopic
+        producer:
+            acks: all     # 服务器确认配置，0表示生产者无须确认，1表示等待leader写入本地log，all表示所有备份都要写入
+            retries: 0    # 生产者发送失败是否重试，0为否
+            batch-size: 16384        # 生产者批量发送消息的字节数上限
+            buffer-memory: 33554432  # 生产者缓存数据的内存大小
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+        consumer:
+#            group-id: test123
+            enable-auto-commit: false  # 未设置group-id时，此参数不能为true
+            auto-commit-interval: 1000
+            auto-offset-reset: earliest
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 server:
     port: 8081  # 指定内置的Tomcat的默认启动端口

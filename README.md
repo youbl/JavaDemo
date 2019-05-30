@@ -35,8 +35,11 @@ mysql/MySqlTest
 - 文件读取、写入、覆盖演示（带字符编码格式）：
 /test/java/com.beinet.firstpg/fileTest/FileHelperTest.java  
 
-- RabbitMQ创建交换器、队列、生产消息、消费消息演示：
+- RabbitMQ消息队列 创建交换器、队列、生产消息、消费消息演示：
 /test/java/com.beinet.firstpg/mqTest/RabbitMQTest.java
+
+- Kafka消息队列 创建删除Topic、生产消息、消费消息演示：
+/test/java/com.beinet.firstpg/mqTest/KafkaTest.java
 
 - MongoDB读取、写入、更新 演示：
 /test/java/com/beinet/firstpg/mongoTest/MongoTest.java

@@ -2,6 +2,7 @@ package com.beinet.firstpg.controller;
 
 import com.beinet.firstpg.mysql.MySqlService;
 import com.beinet.firstpg.mysql.entity.Users;
+import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("")
+@Api(description = "主控制器")
 public class MainController {
     @Autowired
     MySqlService mySqlTest;
@@ -34,6 +36,7 @@ public class MainController {
      * http://localhost:8081/
      */
     @GetMapping("/")
+    @ApiOperation(value = "主Action", notes = "返回当前时间")
     public String Index(){
         return LocalDateTime.now().toString();
     }
@@ -42,8 +45,13 @@ public class MainController {
      * http://localhost:8081/user?account=xxx
      */
     @GetMapping("user")
-    public Users GetUser(String account){
-        if(account == null || account.length() == 0)
+    @ApiOperation(value="根据账号找用户", notes = "未找到时，返回null")
+    @ApiResponses({
+                  @ApiResponse(code=400,message="显示在接口说明文档里，告诉调用者返回400通常是啥原因"),
+                  @ApiResponse(code=404,message="这个code说明你的请求路径不对")
+              })
+    public Users GetUser(@RequestParam @ApiParam(value = "这是后面的参数的描述", required = true, defaultValue = "ybl")String account) {
+        if (account == null || account.length() == 0)
             return null;
         return mySqlTest.GetUserByAccount(account);
     }

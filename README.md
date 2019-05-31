@@ -11,6 +11,11 @@ configs/YmlHelper: Yml解析工具
 - WebSite的Controller使用演示：  
 controller/MainController
 
+- WebSite的swagger文档接入演示：  
+controller/MainController  
+controller/demo/demoController.java  
+访问演示地址： http://localhost:8081/swagger-ui.html  
+
 - 计划任务使用演示：  
 jobs/ScheduleJobs
 

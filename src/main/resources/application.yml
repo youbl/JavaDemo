@@ -15,9 +15,9 @@ spring:
 
     # mysql连接信息配置
     datasource:
-        url: jdbc:mysql://10.2.0.242:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+        url: jdbc:mysql://10.2.0.32:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
         username: beinet
-        password: 123456
+        password: beinet123
         driver-class-name: com.mysql.cj.jdbc.Driver
         # 使用Druid数据库连接池
         type: com.alibaba.druid.pool.DruidDataSource
@@ -38,22 +38,23 @@ spring:
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+            ddl-auto: validate  # update:自动建表或更新字段 validate:表结构不一致时报错
         open-in-view: false
 
     data:
         mongodb:
-            #            uri: mongodb://10.2.0.242:27017/test
-            host: 10.2.0.242
+            #            uri: mongodb://10.2.0.32:27017/test
+            host: 10.2.0.32
             port: 27017
-            username: admin
-            password: Ybl..123
-            database: admin
+            username: beinet
+            password: beinet123
+            database: firstdemo
 
     redis:
-#        url: redis://Ybl...123@10.2.0.242:6378
-        host: 10.2.0.242
-        port: 6378
-        password: Ybl...123
+#        url: redis://Ybl...123@10.2.0.32:6378
+        host: 10.2.0.32
+        port: 6379
+        password: beinet123
         database: 1            # 数据库索引
         ssl: false
         timeout: 1000          # 连接超时时间（毫秒）
@@ -66,14 +67,14 @@ spring:
 
 
     rabbitmq:
-        host: 10.2.0.242
+        host: 10.2.0.32
         port: 5672
-        username: admin
-        password: admin
+        username: beinet
+        password: beinet123
 #        publisher-confirms: true # 代码里去设置true了
 #        virtual-host:
     kafka:
-        bootstrap-servers: 10.2.0.242:9092
+        bootstrap-servers: 10.2.0.32:9092
         template:
             default-topic: mytesttopic
         producer:

@@ -56,7 +56,7 @@ public class MyKafkaConsumer {
 
 
 //    public static<T> void testKafka() throws ExecutionException, InterruptedException {
-//        String  kafkaServer = "10.2.0.242:9092";
+//        String  kafkaServer = "10.2.0.32:9092";
 //        String defaultTopic = "mytesttopic";
 //
 //        // send message

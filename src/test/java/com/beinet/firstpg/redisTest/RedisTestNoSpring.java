@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RedisTestNoSpring extends BaseTest {
 
@@ -105,6 +107,22 @@ public class RedisTestNoSpring extends BaseTest {
             out(emp);
             Thread.sleep(2000);
         }
+    }
+
+    @Test
+    public void TestMulti() throws InterruptedException {
+        ExecutorService executor = Executors.newFixedThreadPool(8);
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<1000;i++)
+            sb.append(i);
+        String val = sb.toString();
+        for (int i = 0; i < 1000; i++) {
+            int i1 = i;
+            executor.submit(() -> {
+                RedisHelper.set("i" + i1, val);
+            });
+        }
+        Thread.sleep(200000);
     }
 
     /**

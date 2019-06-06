@@ -48,3 +48,8 @@ mysql/MySqlTest
 
 - MongoDB读取、写入、更新 演示：
 /test/java/com/beinet/firstpg/mongoTest/MongoTest.java
+
+- 配置中心项目 和 客户端读取中心配置演示项目  
+beinet-config-server  
+beinet-config-client  
+另外，JavaDemo项目也添加了读取中心配置的pom依赖及配置  

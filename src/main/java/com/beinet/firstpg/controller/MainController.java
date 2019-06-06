@@ -1,5 +1,6 @@
 package com.beinet.firstpg.controller;
 
+import com.beinet.firstpg.configs.ConfigReader;
 import com.beinet.firstpg.mysql.MySqlService;
 import com.beinet.firstpg.mysql.entity.Users;
 import io.swagger.annotations.*;
@@ -38,7 +39,9 @@ public class MainController {
     @GetMapping("/")
     @ApiOperation(value = "主Action", notes = "返回当前时间")
     public String Index(){
-        return LocalDateTime.now().toString();
+        String name = ConfigReader.getConfig("Site.Name");
+
+        return name+LocalDateTime.now().toString();
     }
 
     /**

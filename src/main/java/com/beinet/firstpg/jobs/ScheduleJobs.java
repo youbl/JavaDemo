@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 
 /**
  * 演示计划任务和配置读取.
@@ -34,8 +35,9 @@ public class ScheduleJobs {
     /**
      * 每秒执行一次的job
      */
-    @Scheduled(cron="* * * * * *")
+    @Scheduled(cron="*/5 * * * * *")
     public void firstJob() {
+        System.out.println("==================" + LocalDateTime.now());
         if (runed) return;
         runed = true;
 
@@ -46,16 +48,16 @@ public class ScheduleJobs {
 //        System.getProperties().forEach((k, v) -> System.out.println(k + "===" + v));//  + "===" + env.getProperty(k.toString())
 //        System.out.println("==================");
 
-        log.info("beinet.userAgent -> "+ConfigReader.getConfig("beinet.userAgent"));
-        log.info("beinet.ab#c -> "+ConfigReader.getConfig("beinet.ab#c"));
-        log.info("spring.application.memo -> "+ConfigReader.getConfig("spring.application.memo"));
-        log.info("spring.application.mem2 -> "+ConfigReader.getConfig("spring.application.mem2"));
-
-        String key = "spring.datasource.driver-class-name";
-        String val = ConfigReader.getConfig(key);
-        log.info(key + "===" + val);
-
-        outputConfigs();
+//        log.info("beinet.userAgent -> "+ConfigReader.getConfig("beinet.userAgent"));
+//        log.info("beinet.ab#c -> "+ConfigReader.getConfig("beinet.ab#c"));
+//        log.info("spring.application.memo -> "+ConfigReader.getConfig("spring.application.memo"));
+//        log.info("spring.application.mem2 -> "+ConfigReader.getConfig("spring.application.mem2"));
+//
+//        String key = "spring.datasource.driver-class-name";
+//        String val = ConfigReader.getConfig(key);
+//        log.info(key + "===" + val);
+//
+//        outputConfigs();
     }
 
     /*

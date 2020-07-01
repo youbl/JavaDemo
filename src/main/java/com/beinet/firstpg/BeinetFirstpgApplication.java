@@ -19,11 +19,11 @@ import java.util.concurrent.Callable;
 public class BeinetFirstpgApplication {
 
     public static void main(String[] args) {
-        testPool();
-        System.out.println("程序退出");
+        //testPool();
+        //System.out.println("程序退出");
 
         // testExcelHelper();
-//        SpringApplication.run(BeinetFirstpgApplication.class, args);
+        SpringApplication.run(BeinetFirstpgApplication.class, args);
     }
 
     static void testPool() {

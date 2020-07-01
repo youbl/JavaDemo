@@ -13,9 +13,14 @@ spring:
         memo: '"\"afj&%\n=''demo' # 用单引号括起时，\不是转义符，\n是\和n 两个字符，单引号用''(2个单引号)表示
         mem2: "aaa\"d\ndemo"      # 用双引号括起时，\是转义符，\n是1个字符（换行）
 
+    security:
+        user:
+            name: ybl
+            password: 1234321
+
     # mysql连接信息配置
     datasource:
-        url: jdbc:mysql://10.2.0.32:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+        url: jdbc:mysql://10.2.5.2:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
         username: beinet
         password: beinet123
         driver-class-name: com.mysql.cj.jdbc.Driver

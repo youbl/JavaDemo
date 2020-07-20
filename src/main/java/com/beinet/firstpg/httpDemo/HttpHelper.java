@@ -17,13 +17,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-public class HttpHelper {
+public final class HttpHelper {
     private static String USER_AGENT = "Beinet Client 1.0";
     private static Config _defaultConfig;
     private static HashMap<String, String> _defaultHeader;
 
     // 收集每次响应的set-cookie
     private static Map<String, HttpCookie> _cookies = new HashMap<>();
+
+    private HttpHelper() {
+
+    }
 
     static {
         _defaultConfig = InitConfig();
@@ -279,7 +283,8 @@ public class HttpHelper {
 
         // POST/PUT/DELETE 默认采用form data方式
         if (!contentTypeSetted && !method.equals("GET"))
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("Content-Type", "application/json");
+        //connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
         // 设置默认Cookie
         if(!cookieSetted) {

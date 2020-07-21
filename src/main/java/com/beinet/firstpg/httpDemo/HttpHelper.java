@@ -201,7 +201,7 @@ public final class HttpHelper {
         config.setFollowRedirect(true);
         config.setCatchExp(true);
 
-        // todo: 要注释
+        // 这2行是测试代码，要记得注释
 //        config.setShowHeader(true);
 //        config.setProxy("127.0.0.1:8888");
 

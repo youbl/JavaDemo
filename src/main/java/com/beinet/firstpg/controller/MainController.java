@@ -1,7 +1,7 @@
 package com.beinet.firstpg.controller;
 
 import com.beinet.firstpg.configs.ConfigReader;
-import com.beinet.firstpg.mysql.MySqlService;
+import com.beinet.firstpg.mysql.JpaDemo;
 import com.beinet.firstpg.mysql.entity.Users;
 import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
@@ -15,11 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Enumeration;
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.List;
 @Api(description = "主控制器")
 public class MainController {
     @Autowired
-    MySqlService mySqlTest;
+    JpaDemo mySqlTest;
 
     // <editor-fold desc="常规api接口">
 

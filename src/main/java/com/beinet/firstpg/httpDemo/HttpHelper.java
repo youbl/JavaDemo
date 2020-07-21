@@ -7,9 +7,6 @@ import javax.net.ssl.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +39,8 @@ public final class HttpHelper {
 
         // 设置ssl证书处理，避免证书问题导致异常
         try {
-            SSLContext sslcontext = SSLContext.getInstance("SSL", "SunJSSE");
-            TrustManager[] tm = { new X509TrustManagerExt() };
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1.2", "DTLSv1.2");
+            TrustManager[] tm = {new X509TrustManagerExt()};
             sslcontext.init(null, tm, new SecureRandom());
             HostnameVerifier ignoreHostnameVerifier = (s, sslsession) -> {
                 System.out.println("WARNING: Hostname is not matched for cert.");
@@ -51,11 +48,7 @@ public final class HttpHelper {
             };
             HttpsURLConnection.setDefaultHostnameVerifier(ignoreHostnameVerifier);
             HttpsURLConnection.setDefaultSSLSocketFactory(sslcontext.getSocketFactory());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -63,6 +56,7 @@ public final class HttpHelper {
 
     /**
      * GET获取url内容，并返回
+     *
      * @param strUrl url
      * @return 返回的api内容或html
      */
@@ -72,8 +66,9 @@ public final class HttpHelper {
 
     /**
      * GET获取url内容，并返回
+     *
      * @param strUrl url
-     * @param param GET的参数
+     * @param param  GET的参数
      * @return 返回的api内容或html
      */
     public static String GetPage(String strUrl, String param) {
@@ -85,8 +80,9 @@ public final class HttpHelper {
 
     /**
      * POST获取url内容，并返回
+     *
      * @param strUrl url
-     * @param param POST的body
+     * @param param  POST的body
      * @return 返回的api内容或html
      */
     public static String PostPage(String strUrl, String param) {
@@ -98,6 +94,7 @@ public final class HttpHelper {
 
     /**
      * 获取url内容，并返回
+     *
      * @param strUrl url
      * @param config 请求配置
      * @return 返回的api内容或html
@@ -112,7 +109,7 @@ public final class HttpHelper {
             config = _defaultConfig;
         else if (StringUtils.isEmpty(config.getEncoding()))
             config.setEncoding("UTF-8");
-        if(StringUtils.isEmpty(config.getUserAgent()))
+        if (StringUtils.isEmpty(config.getUserAgent()))
             config.setUserAgent(USER_AGENT);
 
         String method = config.getMethod();
@@ -147,7 +144,7 @@ public final class HttpHelper {
             StringBuilder sb = new StringBuilder();
             if (config.isShowHeader()) {
                 sb.append(method).append(" ");
-                if(originUrl != null)
+                if (originUrl != null)
                     sb.append(originUrl).append(" -> ");
                 sb.append(strUrl).append("\r\n请求头信息：\r\n");
                 // getRequestProperties调用必须在getOutputStream或connect之前
@@ -190,14 +187,14 @@ public final class HttpHelper {
             return sb.toString();
         } catch (Exception exp) {
             exp.printStackTrace();
-            return null;
+            return exp.getMessage();
         } finally {
             Close(connection);
             Close(os);
         }
     }
 
-    private static Config InitConfig(){
+    private static Config InitConfig() {
         Config config = new Config();
         config.setMethod("GET");
         config.setEncoding("UTF-8");
@@ -238,7 +235,7 @@ public final class HttpHelper {
         return strUrl;
     }
 
-    private  static HttpURLConnection OpenConnection(URL url, String proxy) throws IOException {
+    private static HttpURLConnection OpenConnection(URL url, String proxy) throws IOException {
         HttpURLConnection ret = null;
         if (StringUtils.isNotEmpty(proxy)) {
             Proxy pr = null;
@@ -287,7 +284,7 @@ public final class HttpHelper {
         //connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
         // 设置默认Cookie
-        if(!cookieSetted) {
+        if (!cookieSetted) {
             String cookies = CombineCookie(connection.getURL().toString());
             if (StringUtils.isNotEmpty(cookies))
                 connection.setRequestProperty("Cookie", cookies);
@@ -296,6 +293,7 @@ public final class HttpHelper {
 
     /**
      * 拼接组装当前请求要使用的Cookie
+     *
      * @param url
      * @return
      */
@@ -383,11 +381,11 @@ public final class HttpHelper {
             } else {
                 is = connection.getErrorStream();
             }
-            if(is == null)
+            if (is == null)
                 return "";
 
             String contentEncoding = connection.getContentEncoding();
-            if(contentEncoding != null && contentEncoding.equals("gzip")) {
+            if (contentEncoding != null && contentEncoding.equals("gzip")) {
                 is = new GZIPInputStream(is);
             }
 
@@ -425,6 +423,7 @@ public final class HttpHelper {
 
     /**
      * 批量关闭对象
+     *
      * @param arrObj 对象
      */
     private static void Close(Closeable... arrObj) {
@@ -442,9 +441,10 @@ public final class HttpHelper {
 
     /**
      * 批量关闭对象
+     *
      * @param arrObj 对象
      */
-    private  static void Close(HttpURLConnection... arrObj) {
+    private static void Close(HttpURLConnection... arrObj) {
         if (arrObj != null) {
             for (HttpURLConnection item : arrObj) {
                 try {

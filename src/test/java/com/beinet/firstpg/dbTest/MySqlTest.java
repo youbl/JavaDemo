@@ -1,7 +1,8 @@
 package com.beinet.firstpg.dbTest;
 
 import com.beinet.firstpg.BaseTest;
-import com.beinet.firstpg.mysql.MySqlService;
+import com.beinet.firstpg.mysql.JdbcTemplateDemo;
+import com.beinet.firstpg.mysql.JpaDemo;
 import com.beinet.firstpg.mysql.entity.Users;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,7 +19,10 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class MySqlTest extends BaseTest {
     @Autowired
-    private MySqlService mysql;
+    private JpaDemo mysql;
+
+    @Autowired
+    private JdbcTemplateDemo jdbcDemo;
 
     @Test
     public void TestInsert() {
@@ -41,7 +45,21 @@ public class MySqlTest extends BaseTest {
     }
 
     @Test
-    public void TestBatchInsert(){
+    public void TestGetTables() {
+        List<String> arrTbs = jdbcDemo.getTables("aa");
+        Assert.assertEquals(arrTbs.size(), 0);
+
+        List<String> arrDBs = jdbcDemo.getDatabases();
+        Assert.assertTrue(arrDBs.size() > 0);
+        arrTbs = jdbcDemo.getTables(arrDBs.get(0));
+        Assert.assertTrue(arrTbs.size() > 0);
+
+        arrTbs = jdbcDemo.getTables(arrDBs);
+        Assert.assertTrue(arrTbs.size() > arrDBs.size());
+    }
+
+    @Test
+    public void TestBatchInsert() {
         List<Users> arr = new ArrayList<>();
         Users user = new Users();
         user.setAccount("aa");
@@ -61,25 +79,24 @@ public class MySqlTest extends BaseTest {
         user.setPwd("123");
         arr.add(user);
 
-        int insNum = mysql.BatchInsert(arr);
+        int insNum = jdbcDemo.BatchInsert(arr);
         Assert.assertEquals(insNum, 3);
     }
 
 
-
     @Test
     public void TestCustomGet() throws SQLException {
-        List<String[]> arr1 = mysql.Execute("select * from users");
-        List<String[]> arr2 = mysql.Execute2("select * from users");
+        List<String[]> arr1 = jdbcDemo.Execute("select * from users");
+        List<String[]> arr2 = jdbcDemo.Execute2("select * from users");
         Assert.assertEquals(arr1.size(), arr2.size());
 
-        for (String[] row : arr1){
+        for (String[] row : arr1) {
             for (String cell : row)
                 System.out.print(cell + ",");
             System.out.println();
         }
         System.out.println("====================");
-        for (String[] row : arr2){
+        for (String[] row : arr2) {
             for (String cell : row)
                 System.out.print(cell + ",");
             System.out.println();

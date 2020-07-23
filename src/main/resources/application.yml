@@ -14,9 +14,9 @@ spring:
         mem2: "aaa\"d\ndemo"      # 用双引号括起时，\是转义符，\n是1个字符（换行）
 
     security:
-        user:
-            name: ybl
-            password: 1234321
+      user:
+        name: ybl
+        password: 1234321
 
     # mysql连接信息配置
     datasource:
@@ -101,6 +101,10 @@ server:
     port: 8081  # 指定内置的Tomcat的默认启动端口
     # 其它server配置 参考 https://www.cnblogs.com/javastack/p/9153952.html
 
+    #登录Session超时过期时间，单位秒，超过10秒就要重新登录
+    servlet:
+        session:
+            timeout: 10
 
 logging:
     level:

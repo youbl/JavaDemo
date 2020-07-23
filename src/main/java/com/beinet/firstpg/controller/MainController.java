@@ -26,8 +26,6 @@ import java.util.List;
 @RequestMapping("")
 @Api(description = "主控制器")
 public class MainController {
-    @Autowired
-    JpaDemo mySqlTest;
 
     // <editor-fold desc="常规api接口">
 
@@ -36,43 +34,11 @@ public class MainController {
      */
     @GetMapping("/")
     @ApiOperation(value = "主Action", notes = "返回当前时间")
-    public String Index(){
+    public String Index() {
         String name = ConfigReader.getConfig("Site.Name");
 
-        return name+LocalDateTime.now().toString();
+        return name + LocalDateTime.now().toString();
     }
-
-    /**
-     * http://localhost:8081/user?account=xxx
-     */
-    @GetMapping("user")
-    @ApiOperation(value="根据账号找用户", notes = "未找到时，返回null")
-    @ApiResponses({
-                  @ApiResponse(code=400,message="显示在接口说明文档里，告诉调用者返回400通常是啥原因"),
-                  @ApiResponse(code=404,message="这个code说明你的请求路径不对")
-              })
-    public Users GetUser(@RequestParam @ApiParam(value = "这是后面的参数的描述", required = true, defaultValue = "ybl")String account) {
-        if (account == null || account.length() == 0)
-            return null;
-        return mySqlTest.GetUserByAccount(account);
-    }
-
-    /**
-     * http://localhost:8081/users
-     */
-    @GetMapping("users")
-    public List<Users> GetUsers(){
-        return mySqlTest.GetUsers();
-    }
-
-    /**
-     * http://localhost:8081/users_week
-     */
-    @GetMapping("users_week")
-    public List<Users> GetUsersWeek(){
-        return mySqlTest.GetUsersByWeek();
-    }
-
 
     // </editor-fold>
 
@@ -81,10 +47,11 @@ public class MainController {
 
     /**
      * 演示往输出里添加Header，cookie加起来麻烦。
+     *
      * @return
      */
     @GetMapping("header")
-    public ResponseEntity TestHeader(){
+    public ResponseEntity TestHeader() {
         HttpHeaders headers = new HttpHeaders();
         // 下面2种方式都可以写入Header的 Location
         headers.add("Location", "http://www.baidu.com/");
@@ -93,17 +60,18 @@ public class MainController {
         headers.add("abcde", LocalDateTime.now().toString());
         headers.add("Set-Cookie", "def1=2dd325; Max-Age=12; Expires=Fri, 27-May-2019 09:10:54 GMT; HttpOnly");
         headers.add("Set-Cookie", "abc1=2325");
-        ResponseEntity ret = new ResponseEntity( "234", headers, HttpStatus.OK);
+        ResponseEntity ret = new ResponseEntity("234", headers, HttpStatus.OK);
         return ret;
     }
 
 
     /**
      * 演示往输出里添加Header的另一种方法
+     *
      * @return
      */
     @GetMapping("header2")
-    public String TestHeader2(HttpServletResponse response){
+    public String TestHeader2(HttpServletResponse response) {
         response.addCookie(new Cookie("abc", "2325"));
 
         Cookie cook = new Cookie("def", "2dd325");
@@ -118,16 +86,17 @@ public class MainController {
 
     /**
      * 演示读取请求信息
+     *
      * @return
      */
     @GetMapping("request")
-    public ResponseEntity TestRequest(HttpServletRequest request){
+    public ResponseEntity TestRequest(HttpServletRequest request) {
         // String ua = request.getHeader("user-agENT"); // key不区分大小写
 
         StringBuilder sb = new StringBuilder();
         // 获取所有请求Header
         Enumeration<String> headers = request.getHeaderNames();
-        while(headers.hasMoreElements()){
+        while (headers.hasMoreElements()) {
             String name = headers.nextElement();
             sb.append(name).append("===").append(request.getHeader(name)).append("<br>");
         }
@@ -145,7 +114,7 @@ public class MainController {
 
     // <editor-fold desc="文件上传Demo">
     @PostMapping("upload")
-    public String upload(@RequestParam("file")MultipartFile file) throws IOException {
+    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
         try (FileOutputStream fos = new FileOutputStream("d:/tmp.tmp")) {
             try (InputStream is = file.getInputStream()) {
                 IOUtils.copy(is, fos);

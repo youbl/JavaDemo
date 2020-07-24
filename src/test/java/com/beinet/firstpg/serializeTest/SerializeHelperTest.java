@@ -29,6 +29,7 @@ public class SerializeHelperTest extends BaseTest {
         SerializeDto dtoFromJson = SerializeHelper.deserialize(json, SerializeDto.class);
 
         Assert.assertEquals(dto.toString(), dtoFromJson.toString());
+        // boolean aa = dto.equals(dtoFromJson);
         Assert.assertNotEquals(dto, dtoFromJson);
     }
 }

@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class SerializeDto {
     private long id;
     private String name;
-    //@JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime birthday;
     private float money;
 

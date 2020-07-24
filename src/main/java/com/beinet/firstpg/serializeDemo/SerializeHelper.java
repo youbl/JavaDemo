@@ -27,13 +27,36 @@ public final class SerializeHelper {
     static {
         mapper = new ObjectMapper();
 
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
-        mapper.registerModule(javaTimeModule);
+//        JavaTimeModule javaTimeModule = new JavaTimeModule();
+//        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+//        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
+//        mapper.registerModule(javaTimeModule);
 
         // 解决 com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of `java.time.LocalDateTime`
-//         mapper.registerModule(new JavaTimeModule());
+        // 自动支持JsonFormat注解和各种日期格式, 要引入 jackson-datatype-jsr310
+         mapper.registerModule(new JavaTimeModule());
+
+        /*
+        注意：如果报错：java.lang.NoClassDefFoundError: com/fasterxml/jackson/databind/ser/std/ToStringSerializerBase
+        请确保引入了 jackson-databind
+        如果报错：java.lang.NoClassDefFoundError: com/fasterxml/jackson/core/exc/InputCoercionException
+        请确保引入了 jackson-core
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.11.1</version>
+        </dependency>
+        * */
     }
 
     public static class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {

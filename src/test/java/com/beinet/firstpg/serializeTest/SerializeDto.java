@@ -12,7 +12,7 @@ public class SerializeDto {
     private String name;
     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime birthday;
-    private float money;
+    private double money;
 
     @Override
     public String toString() {

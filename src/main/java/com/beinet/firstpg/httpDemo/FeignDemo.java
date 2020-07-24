@@ -1,6 +1,5 @@
 package com.beinet.firstpg.httpDemo;
 
-import com.alibaba.fastjson.JSONObject;
 import com.beinet.firstpg.configs.FeignConfiguration;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import feign.RequestLine;
@@ -27,7 +26,7 @@ public interface FeignDemo {
             headers = {"Content-Type=application/json",
             "Accept=application/json",
             "User-Agent=${beinet.userAgent}"})
-    JSONObject DoGet(@RequestParam("type") String type, @RequestParam("postid") String pid,
+    Map<String, Object> DoGet(@RequestParam("type") String type, @RequestParam("postid") String pid,
                      @RequestHeader("authorize") String auth);
 
 

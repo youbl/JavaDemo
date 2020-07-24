@@ -2,6 +2,7 @@ package com.beinet.firstpg.redisDemo;
 
 import com.beinet.firstpg.configs.ConfigHelper;
 import com.beinet.firstpg.serializeDemo.SerializeHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +17,7 @@ import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 
@@ -163,12 +165,22 @@ public class RedisHelper {
 
         @Override
         public byte[] serialize(T t) throws SerializationException {
-            return SerializeHelper.serialize(t);
+            try {
+                return SerializeHelper.serialize(t);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override
         public T deserialize(byte[] bytes) throws SerializationException {
-            return SerializeHelper.deserialize(bytes, clazz);
+            try {
+                return SerializeHelper.deserialize(bytes, clazz);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
     }

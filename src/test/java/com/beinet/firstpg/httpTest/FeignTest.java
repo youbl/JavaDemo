@@ -1,6 +1,5 @@
 package com.beinet.firstpg.httpTest;
 
-import com.alibaba.fastjson.JSONObject;
 import com.beinet.firstpg.BaseTest;
 import com.beinet.firstpg.httpDemo.FeignDemo;
 import com.beinet.firstpg.httpDemo.HttpRet;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +23,8 @@ public class FeignTest extends BaseTest {
     @Test
     public void TestGet(){
         // 验证get方法
-        JSONObject obj = feignDemo.DoGet("yuantong", "111111", "youbl");
-        out(obj.toJSONString());
+        Map<String, Object> obj = feignDemo.DoGet("yuantong", "111111", "youbl");
+        //out(obj.toJSONString());
         Assert.assertNotEquals(obj, null);
     }
 

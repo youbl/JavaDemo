@@ -1,78 +1,152 @@
 package com.beinet.firstpg.serializeDemo;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import org.springframework.data.redis.serializer.SerializationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import java.nio.charset.Charset;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+// import java.nio.charset.Charset;
 
-public class SerializeHelper {
-    public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+public final class SerializeHelper {
+    private SerializeHelper() {
+
+    }
+
+    // public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+    private static final ObjectMapper mapper;
+    private static final String pattern = "yyyy-MM-dd HH:mm:ss";
 
     static {
-        // 反序列化支持需要配置，否则会报错：autoType is not support.
-        // 因为有过安全漏洞，不建议全局开启AutoType，https://www.jianshu.com/p/a92ecc33fd0d
-        // ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
-        ParserConfig.getGlobalInstance().addAccept("com.beinet.");
+        mapper = new ObjectMapper();
+
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
+        mapper.registerModule(javaTimeModule);
+
+        // 解决 com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of `java.time.LocalDateTime`
+//         mapper.registerModule(new JavaTimeModule());
+    }
+
+    public static class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
+        @Override
+        public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            gen.writeString(value.format(DateTimeFormatter.ofPattern(pattern)));
+        }
+    }
+
+    public static class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+        @Override
+        public LocalDateTime deserialize(JsonParser p, DeserializationContext deserializationContext) throws IOException {
+            return LocalDateTime.parse(p.getValueAsString(), DateTimeFormatter.ofPattern(pattern));
+        }
     }
 
     /**
      * 序列化为字符串
+     *
      * @param obj 对象
      * @return 字符串
-     * @throws SerializationException 异常
+     * @throws JsonProcessingException 异常
      */
-    public static String serializeToStr(Object obj) throws SerializationException {
+    public static String serializeToStr(Object obj) throws JsonProcessingException {
         if (obj == null) {
             return null;
         }
-        return JSON.toJSONString(obj, SerializerFeature.WriteClassName);
+        return mapper.writeValueAsString(obj);
     }
 
 
     /**
      * 从字符串反序列化为对象
-     * @param jsonStr 字符串
+     *
+     * @param jsonStr  字符串
      * @param objClass 对象类型
-     * @param <T> 对象类
+     * @param <T>      对象类
      * @return 对象
-     * @throws SerializationException 异常
+     * @throws IOException 异常
      */
-    public static<T> T deserialize(String jsonStr, Class<T> objClass) throws SerializationException {
-        if (jsonStr == null) {
+    public static <T> T deserialize(String jsonStr, Class<T> objClass) throws IOException {
+        if (jsonStr == null || jsonStr.length() <= 0) {
             return null;
         }
-        return (T) JSON.parseObject(jsonStr, objClass);
+        return mapper.readValue(jsonStr, objClass);
+    }
+
+    /**
+     * 从字节数组反序列化为对象数组
+     *
+     * @param jsonStr  字符串
+     * @param objClass 对象类型
+     * @param <T>      对象类
+     * @return 对象数组
+     * @throws IOException 异常
+     */
+    public static <T> List<T> deserializeToArr(String jsonStr, Class<T> objClass) throws IOException {
+        if (jsonStr == null || jsonStr.length() <= 0) {
+            return null;
+        }
+        JavaType type = mapper.getTypeFactory().constructParametricType(List.class, objClass);
+        return mapper.readValue(jsonStr, type);
     }
 
     /**
      * 序列化为字节数组
+     *
      * @param obj 对象
      * @return 字节数组
-     * @throws SerializationException 异常
+     * @throws JsonProcessingException 异常
      */
-    public static byte[] serialize(Object obj) throws SerializationException {
-        String str = serializeToStr(obj);
-        if (str == null) {
-            return new byte[0];
+    public static byte[] serialize(Object obj) throws JsonProcessingException {
+        if (obj == null) {
+            return null;
         }
-        return str.getBytes(DEFAULT_CHARSET);
+        return mapper.writeValueAsBytes(obj);
+        // String str = serializeToStr(obj);
+        // return str.getBytes(DEFAULT_CHARSET);
     }
 
     /**
      * 从字节数组反序列化为对象
-     * @param bytes 字节数组
+     *
+     * @param bytes    字节数组
      * @param objClass 对象类型
-     * @param <T> 对象类
+     * @param <T>      对象类
      * @return 对象
-     * @throws SerializationException 异常
+     * @throws IOException 异常
      */
-    public static<T> T deserialize(byte[] bytes, Class<T> objClass) throws SerializationException {
+    public static <T> T deserialize(byte[] bytes, Class<T> objClass) throws IOException {
         if (bytes == null || bytes.length <= 0) {
             return null;
         }
-        String str = new String(bytes, DEFAULT_CHARSET);
-        return deserialize(str, objClass);
+        return mapper.readValue(bytes, objClass);
+        // String str = new String(bytes, DEFAULT_CHARSET);
+        // return deserialize(str, objClass);
+    }
+
+
+    /**
+     * 从字节数组反序列化为对象数组
+     *
+     * @param bytes    字节数组
+     * @param objClass 对象类型
+     * @param <T>      对象类
+     * @return 对象数组
+     * @throws IOException 异常
+     */
+    public static <T> List<T> deserializeToArr(byte[] bytes, Class<T> objClass) throws IOException {
+        if (bytes == null || bytes.length <= 0) {
+            return null;
+        }
+        JavaType type = mapper.getTypeFactory().constructParametricType(List.class, objClass);
+        return mapper.readValue(bytes, type);
     }
 }

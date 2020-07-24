@@ -1,6 +1,7 @@
 package com.beinet.firstpg.mqDemo;
 
 import com.beinet.firstpg.serializeDemo.SerializeHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.impl.recovery.AutorecoveringChannel;
 import lombok.Data;
@@ -192,7 +193,7 @@ public class RabbitMQPool {
      * @param exchangeName 交换器名，为空表示使用没名字的默认交换器
      * @param message      消息对象
      */
-    public void publish(String exchangeName, Object message) {
+    public void publish(String exchangeName, Object message) throws JsonProcessingException {
         publish(exchangeName, message, null, 1, null);
     }
 
@@ -204,7 +205,7 @@ public class RabbitMQPool {
      * @param message      消息对象
      * @param routingKey   路由的Key
      */
-    public void publish(String exchangeName, Object message, String routingKey) {
+    public void publish(String exchangeName, Object message, String routingKey) throws JsonProcessingException {
         publish(exchangeName, message, null, 1, routingKey);
     }
 
@@ -215,7 +216,7 @@ public class RabbitMQPool {
      * @param message      消息对象
      * @param headers      消息的头信息
      */
-    public void publish(String exchangeName, Object message, Map<String, Object> headers) {
+    public void publish(String exchangeName, Object message, Map<String, Object> headers) throws JsonProcessingException {
         publish(exchangeName, message, headers, 1, null);
     }
 
@@ -227,7 +228,7 @@ public class RabbitMQPool {
      * @param headers      消息的头信息
      * @param routingKey   路由的Key
      */
-    public void publish(String exchangeName, Object message, Map<String, Object> headers, String routingKey) {
+    public void publish(String exchangeName, Object message, Map<String, Object> headers, String routingKey) throws JsonProcessingException {
         publish(exchangeName, message, headers, 1, routingKey);
     }
 
@@ -240,7 +241,7 @@ public class RabbitMQPool {
      * @param deliveryMode 是否持久化 1:不持久化 2：持久化
      * @param routingKey   路由的Key
      */
-    public void publish(String exchangeName, Object message, Map<String, Object> headers, int deliveryMode, String routingKey) {
+    public void publish(String exchangeName, Object message, Map<String, Object> headers, int deliveryMode, String routingKey) throws JsonProcessingException {
         MessageProperties properties = new MessageProperties();
 
 //        // 设置时间戳和消息id

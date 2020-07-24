@@ -52,7 +52,7 @@ public class BeinetFirstpgApplication {
     }
 
     static void testExcelHelper() throws IOException {
-        System.out.println(com.beinet.firstmaven.ExcelHelper.readExcel("D:\\work\\1.xlsx", 1, 0));
+        //System.out.println(com.beinet.firstmaven.ExcelHelper.readExcel("D:\\work\\1.xlsx", 1, 0));
     }
 
     static <T> T printTime(Callable<T> task) {

@@ -35,7 +35,7 @@ public class RabbitMQTest extends RabbitMQTestNoSpring {
 
 
     @Test
-    public void PublishTest() throws InterruptedException {
+    public void PublishTest() throws Exception {
         super.PublishTest();
     }
 }

@@ -40,7 +40,7 @@ public class KafkaTest extends BaseTest {
     }
 
     @Test
-    public void PublishTest() throws InterruptedException, ExecutionException {
+    public void PublishTest() throws Exception {
         try {
             MyKafkaProducer.createTopic();
         } catch (Exception exp) {

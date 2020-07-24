@@ -1,6 +1,5 @@
 package com.beinet.firstpg.httpDemo;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 @Data
@@ -12,6 +11,6 @@ public class HttpRet {
     private String com;
     private String status;
     private String state;
-    private JSONObject[] data;
+    //private JSONObject[] data;
 }
 

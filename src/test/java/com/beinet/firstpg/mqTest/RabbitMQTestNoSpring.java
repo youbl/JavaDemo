@@ -82,7 +82,7 @@ public class RabbitMQTestNoSpring extends BaseTest {
 
 
     @Test
-    public void PublishTest() throws InterruptedException {
+    public void PublishTest() throws Exception {
         // 先开启队列监听
         startWaitMsg();
 

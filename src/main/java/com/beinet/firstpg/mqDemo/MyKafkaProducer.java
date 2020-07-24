@@ -124,7 +124,7 @@ public class MyKafkaProducer {
 
 
 
-    public static void produce(String key, Object val) throws ExecutionException, InterruptedException {
+    public static void produce(String key, Object val) throws Exception {
         String strVal = SerializeHelper.serializeToStr(val);
         ProducerRecord<String, String> msg = new ProducerRecord<>(defaultTopic, key, strVal);
         Future ret = producer.send(msg);

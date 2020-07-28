@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 // import java.nio.charset.Charset;
 
 public final class SerializeHelper {
@@ -34,7 +35,7 @@ public final class SerializeHelper {
 
         // 解决 com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of `java.time.LocalDateTime`
         // 自动支持JsonFormat注解和各种日期格式, 要引入 jackson-datatype-jsr310
-         mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(new JavaTimeModule());
 
         /*
         注意：如果报错：java.lang.NoClassDefFoundError: com/fasterxml/jackson/databind/ser/std/ToStringSerializerBase
@@ -172,4 +173,39 @@ public final class SerializeHelper {
         JavaType type = mapper.getTypeFactory().constructParametricType(List.class, objClass);
         return mapper.readValue(bytes, type);
     }
+
+
+    /**
+     * 把Map数组转换为对象数组返回
+     *
+     * @param map      map数组
+     * @param objClass 对象类型
+     * @param <T>      对象类型
+     * @return 对象数组
+     * @throws IOException 可能的异常
+     */
+    public static <T> T convertToObj(Map<String, Object> map, Class<T> objClass) throws IOException {
+        if (map == null || map.size() <= 0) {
+            return null;
+        }
+        return mapper.readValue(mapper.writeValueAsBytes(map), objClass);
+    }
+
+    /**
+     * 把Map数组转换为对象数组返回
+     *
+     * @param mapArr   map数组
+     * @param objClass 对象类型
+     * @param <T>      对象类型
+     * @return 对象数组
+     * @throws IOException 可能的异常
+     */
+    public static <T> List<T> convertToObjArr(List<Map<String, Object>> mapArr, Class<T> objClass) throws IOException {
+        if (mapArr == null || mapArr.size() <= 0) {
+            return null;
+        }
+        JavaType type = mapper.getTypeFactory().constructParametricType(List.class, objClass);
+        return mapper.readValue(mapper.writeValueAsBytes(mapArr), type);
+    }
+
 }

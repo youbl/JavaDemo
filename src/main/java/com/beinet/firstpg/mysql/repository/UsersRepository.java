@@ -2,6 +2,7 @@ package com.beinet.firstpg.mysql.repository;
 
 import com.beinet.firstpg.mysql.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,9 +30,14 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     Users findByAccount(String account);
 
     /**
-     * 指定账号是否存在
+     * 指定账号是否存在，注意使用 in语句时，参数必须带序号 如 ?1 没有序号会报null异常
+     *
      * @param account 账号
      * @return true false
      */
     boolean existsByAccount(String account);
+
+    @Query(value = "select * from #{#entityName} where account in ?1",
+            nativeQuery = true)
+    List<Users> findByAccountArr(List<String> accounts);
 }

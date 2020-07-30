@@ -108,7 +108,7 @@ public class YmlHelper {
 
         //if (idx > 0) {
         String tmp = val.substring(idx + 1).trim();
-        if (tmp.charAt(0) != '#')
+        if (tmp.length() > 0 && tmp.charAt(0) != '#')
             throw new Exception("err value:" + val);
 
         val = val.substring(1, idx);

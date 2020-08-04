@@ -20,7 +20,7 @@ spring:
 
     # mysql连接信息配置
     datasource:
-        url: jdbc:mysql://10.2.5.2:3306/firstdemodb?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+        url: jdbc:mysql://10.2.5.2:3306/firstdemodb?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
         username: beinet
         password: beinet123
         driver-class-name: com.mysql.cj.jdbc.Driver

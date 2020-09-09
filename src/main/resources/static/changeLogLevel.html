@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改日志级别</title>
+</head>
+<body>
+<div id="vueBody">
+    <button @click="viewLogLevel">查看日志级别配置</button>
+    |||
+    包名或类名：<input type="text" v-model="path" value="root" style="width: 400px">
+    日志级别：<select v-model="level">
+    <option>TRACE</option>
+    <option>DEBUG</option>
+    <option>INFO</option>
+    <option>WARN</option>
+    <option>ERROR</option>
+</select>
+    <button @click="changeLogLevel">修改</button>
+    <hr>
+    <pre>{{ JSON.stringify(logLevel, null, 4) }}</pre>
+</div>
+
+<script src="/res/unpkg/axios.min.js"></script>
+<script src="/res/unpkg/vue.min.js"></script>
+<script src="/res/qs.min.js"></script>
+<script src="/res/rowColor.js"></script>
+<script type="text/javascript">
+    var urlParams = new URLSearchParams(window.location.search);
+
+    function param(key) {
+        return urlParams.get(key);
+    }
+</script>
+
+<script>
+    new Vue({
+        el: '#vueBody',
+        data: {
+            logLevel: {},
+            path: '',
+            level: 'INFO',
+        },
+        methods: {
+            viewLogLevel: function () {
+                let url = '/actuator/loggers/' + encodeURIComponent(this.path);
+                axios.get(url).then(response => {
+                    Vue.set(this, 'logLevel', response.data);
+                }).catch(error => {
+                    this.ajaxError(error);
+                });
+            },
+            changeLogLevel: function () {
+                if (!this.path) {
+                    alert('要修改的包名或类名不能为空');
+                    return;
+                }
+                let url = '/actuator/loggers/' + encodeURIComponent(this.path);
+                axios.post(url, {'configuredLevel': this.level}).then(response => {
+                    alert('修改成功');
+                }).catch(error => {
+                    this.ajaxError(error);
+                });
+            },
+            ajaxError: function (error) {
+                if (error.response && error.response.data) {
+                    let msg = error.response.data['Msg'];
+                    if (msg === 'Unauthorized') {
+                        location.href = '/login?r=%2Fadmin%23%2FserverStatus.html';
+                        return;
+                    }
+                    console.log(JSON.stringify(error.response.data));
+                    alert(msg);
+                } else {
+                    console.log(JSON.stringify(error));
+                    alert('未知错误');
+                }
+            },
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,7 +1,5 @@
 # 读取配置中心的url规则：spring.cloud.config.uri/spring.application.name/spring.cloud.config.profile/spring.cloud.config.label
 # 例如：如下配置，得到的url是 http://localhost:8888/firstdemo/test/master
-server:
-    port: 8887
 spring:
     application:
         name: firstdemo                    # 项目名，配置中心读取配置用

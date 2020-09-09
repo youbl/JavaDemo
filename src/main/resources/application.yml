@@ -108,8 +108,14 @@ server:
 
 logging:
     level:
-        # 这个配置，指示com.beinet.firstpg.httpDemo.FeignDemo 类要输出详细http日志
+        # root是指定全局的日志级别，默认就是info
+        root: info
+        # 下面这个配置，指示com.beinet.firstpg.httpDemo.FeignDemo 类要输出详细http日志
         com.beinet.firstpg.httpDemo.FeignDemo: debug
+        # 下面这个配置，指示com.beinet.firstpg.jobs 要输出debug及以上级别的日志。注：只能是包名或类名，不能是方法
+        com.beinet.firstpg.jobs: debug
+        com.beinet.firstpg.jobs.ScheduleJobs.ScheduleJobForLogTest1: trace
+
 feign:
     client:
         config:
@@ -117,4 +123,8 @@ feign:
                 connectTimeout: 2000  # 连接超时时间，毫秒
                 readTimeout: 2000     # 读数据超时时间，毫秒
                 loggerLevel: full     # 输出日志的级别
-
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"          #开启全部的SpringBoot健康检查api，如 loggers, env

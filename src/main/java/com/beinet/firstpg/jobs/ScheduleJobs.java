@@ -33,9 +33,9 @@ public class ScheduleJobs {
     }
 
     /**
-     * 每秒执行一次的job
+     * 每5秒执行一次的job
      */
-    @Scheduled(cron="*/5 * * * * *")
+    //@Scheduled(cron="*/5 * * * * *")
     public void firstJob() {
         System.out.println("==================" + LocalDateTime.now());
         if (runed) return;

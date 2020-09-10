@@ -106,6 +106,7 @@ server:
         session:
             timeout: 10
 
+# 官网参考 https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#boot-features-custom-log-levels
 logging:
     level:
         # root是指定全局的日志级别，默认就是info

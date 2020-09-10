@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface EmployeeRepository extends MongoRepository<Employee, Integer> {
+public interface EmployeeRepository {// extends MongoRepository<Employee, Integer> {
     /**
      * 根据名称精确匹配
      * @param name 姓名

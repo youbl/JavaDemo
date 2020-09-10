@@ -7,6 +7,7 @@
 <body>
 <div id="vueBody">
     <button @click="viewLogLevel">查看日志级别配置</button>
+    <button @click="refreshConfig">刷新配置</button> 注：刷新,并不会恢复日志配置
     |||
     包名或类名：<input type="text" v-model="path" value="root" style="width: 400px">
     日志级别：<select v-model="level">
@@ -42,6 +43,7 @@
             level: 'INFO',
         },
         methods: {
+            // 查看日志等级配置
             viewLogLevel: function () {
                 let url = '/actuator/loggers/' + encodeURIComponent(this.path);
                 axios.get(url).then(response => {
@@ -50,6 +52,7 @@
                     this.ajaxError(error);
                 });
             },
+            // 修改指定包或类的日志等级配置
             changeLogLevel: function () {
                 if (!this.path) {
                     alert('要修改的包名或类名不能为空');
@@ -58,6 +61,15 @@
                 let url = '/actuator/loggers/' + encodeURIComponent(this.path);
                 axios.post(url, {'configuredLevel': this.level}).then(response => {
                     alert('修改成功');
+                }).catch(error => {
+                    this.ajaxError(error);
+                });
+            },
+            // 刷新配置，无法恢复日志等级配置
+            refreshConfig: function () {
+                let url = '/actuator/refresh';
+                axios.post(url).then(response => {
+                    Vue.set(this, 'logLevel', response.data);
                 }).catch(error => {
                     this.ajaxError(error);
                 });

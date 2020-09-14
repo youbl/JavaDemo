@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  */
 @Component
 @Slf4j // 日志对象注解
-@EnableScheduling
+@EnableScheduling // 只需要有一个地方定义了这个注解就可以，不需要每个类都定义
 public class ScheduleJobs {
     private boolean runed;
 

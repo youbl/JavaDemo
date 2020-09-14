@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j // 日志对象注解
-@EnableScheduling
 public class ScheduleJobForLogTest2 {
     /**
      * 每5秒执行一次的job

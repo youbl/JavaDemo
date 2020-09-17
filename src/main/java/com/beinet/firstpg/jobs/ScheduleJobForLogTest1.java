@@ -1,7 +1,10 @@
 package com.beinet.firstpg.jobs;
 
+import com.beinet.firstpg.configs.ConfigReadTest;
+import com.beinet.firstpg.configs.ConfigReader;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,17 +14,31 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j // 日志对象注解
 public class ScheduleJobForLogTest1 {
+
+    // 当修改配置中心的配置值，并调用了/actuator/refresh时，Value注解的配置不生效。
+    // 必须在class上添加注解 RefreshScope，才会生效，但是 RefreshScope会导致 当前类的Scheduled停止运行
+    @Value("${mike.app.iAmTest}")
+    private String configField;
+
+    @Autowired
+    ConfigReadTest readTest;
+
     /**
      * 每5秒执行一次的job
      */
     @Scheduled(cron = "*/5 * * * * *")
     public void logJob1() {
-        String method = "ScheduleJobForLogTest1.logJob1";
-        log.trace("{} 我是trace", method);
-        log.debug("{} 我是debug", method);
-        log.info("{} 我是info", method);
-        log.warn("{} 我是warn", method);
-        log.error("{} 我是error", method);
+        // 这个方法读取配置，会实时生效
+        String config = ConfigReader.getConfig("mike.app.iAmTest");
+
+        System.out.println(configField + "\n" + config + "\n" + readTest.getConfigField());
+
+//        String method = "ScheduleJobForLogTest1.logJob1";
+//        log.trace("{} 我是trace", method);
+//        log.debug("{} 我是debug", method);
+//        log.info("{} 我是info", method);
+//        log.warn("{} 我是warn", method);
+//        log.error("{} 我是error", method);
     }
 
 }

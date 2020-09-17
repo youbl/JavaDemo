@@ -14,7 +14,7 @@ public class ScheduleJobForLogTest2 {
     /**
      * 每5秒执行一次的job
      */
-    @Scheduled(cron = "*/5 * * * * *")
+    //@Scheduled(cron = "*/5 * * * * *")
     public void logJob1() {
         String method = "ScheduleJobForLogTest2.logJob1";
         log.trace("{} 我是trace", method);

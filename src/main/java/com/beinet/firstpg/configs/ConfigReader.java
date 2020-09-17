@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ConfigReader {
+    // 默认为 StandardServletEnvironment 类
     static org.springframework.core.env.Environment env;
     @Autowired
     public ConfigReader(org.springframework.core.env.Environment env){

@@ -1,5 +1,6 @@
 package com.beinet.firstpg.controller.demo;
 
+import com.beinet.firstpg.configs.ConfigReadTest;
 import com.beinet.firstpg.configs.ConfigReader;
 import com.beinet.firstpg.mysql.entity.Users;
 import io.swagger.annotations.*;
@@ -15,7 +16,7 @@ public class demoController {
 
     @GetMapping
     public String index() {
-        String config = ConfigReader.getConfig("mike.app.iAmTest");
+        String config = ConfigReader.getConfig(ConfigReadTest.configName);
         return config + " : " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     }
 

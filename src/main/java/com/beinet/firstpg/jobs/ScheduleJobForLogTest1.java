@@ -17,7 +17,7 @@ public class ScheduleJobForLogTest1 {
 
     // 当修改配置中心的配置值，并调用了/actuator/refresh时，Value注解的配置不生效。
     // 必须在class上添加注解 RefreshScope，才会生效，但是 RefreshScope会导致 当前类的Scheduled停止运行
-    @Value("${mike.app.iAmTest}")
+    @Value("${" + ConfigReadTest.configName + "}")
     private String configField;
 
     @Autowired
@@ -26,10 +26,10 @@ public class ScheduleJobForLogTest1 {
     /**
      * 每5秒执行一次的job
      */
-    @Scheduled(cron = "*/5 * * * * *")
+     @Scheduled(cron = "*/5 * * * * *")
     public void logJob1() {
         // 这个方法读取配置，会实时生效
-        String config = ConfigReader.getConfig("mike.app.iAmTest");
+        String config = ConfigReader.getConfig(ConfigReadTest.configName);
 
         System.out.println(configField + "\n" + config + "\n" + readTest.getConfigField());
 

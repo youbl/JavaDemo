@@ -26,7 +26,7 @@ public class ScheduleJobForLogTest1 {
     /**
      * 每5秒执行一次的job
      */
-     @Scheduled(cron = "*/5 * * * * *")
+    // @Scheduled(cron = "*/5 * * * * *")
     public void logJob1() {
         // 这个方法读取配置，会实时生效
         String config = ConfigReader.getConfig(ConfigReadTest.configName);

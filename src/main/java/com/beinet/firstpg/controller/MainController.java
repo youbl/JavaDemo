@@ -4,7 +4,9 @@ import com.beinet.firstpg.configs.ConfigReader;
 import com.beinet.firstpg.mysql.JpaDemo;
 import com.beinet.firstpg.mysql.entity.Users;
 import io.swagger.annotations.*;
+import lombok.Data;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,16 +32,32 @@ public class MainController {
     // <editor-fold desc="常规api接口">
 
     /**
-     * http://localhost:8081/
+     * http://localhost:8081/?id=123
      */
     @GetMapping("/")
     @ApiOperation(value = "主Action", notes = "返回当前时间")
-    public String Index() {
+    public String Index(@RequestParam(required = false) int id, @RequestParam(required = false) String para) {
         String name = ConfigReader.getConfig("Site.Name");
 
-        return name + LocalDateTime.now().toString();
+        return name + " " + LocalDateTime.now().toString() + " " + id + " " + para;
     }
 
+    /**
+     * curl -X POST "http://localhost:8081/?id=123&para=asdfslsjda"
+     */
+    @PostMapping("/")
+    public ResultTest PostTest(@RequestParam(required = false) int id, @RequestParam(required = false) String para) {
+        ResultTest ret = new ResultTest();
+        ret.setId(id > 0 ? id : -789);
+        ret.setName(StringUtils.isEmpty(para) ? "empty" : para);
+        return ret;
+    }
+
+    @Data
+    public static class ResultTest {
+        private int id;
+        private String name;
+    }
     // </editor-fold>
 
 

@@ -36,7 +36,7 @@ public class MainController {
      */
     @GetMapping("/")
     @ApiOperation(value = "主Action", notes = "返回当前时间")
-    public String Index(@RequestParam(required = false) int id, @RequestParam(required = false) String para) {
+    public String Index(@RequestParam(required = false) Integer id, @RequestParam(required = false) String para) {
         String name = ConfigReader.getConfig("Site.Name");
 
         return name + " " + LocalDateTime.now().toString() + " " + id + " " + para;
@@ -46,9 +46,9 @@ public class MainController {
      * curl -X POST "http://localhost:8081/?id=123&para=asdfslsjda"
      */
     @PostMapping("/")
-    public ResultTest PostTest(@RequestParam(required = false) int id, @RequestParam(required = false) String para) {
+    public ResultTest PostTest(@RequestParam(required = false) Integer id, @RequestParam(required = false) String para) {
         ResultTest ret = new ResultTest();
-        ret.setId(id > 0 ? id : -789);
+        ret.setId((id != null && id > 0) ? id : -789);
         ret.setName(StringUtils.isEmpty(para) ? "empty" : para);
         return ret;
     }

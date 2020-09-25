@@ -24,9 +24,9 @@ public class ResponseLogAdvice implements ResponseBodyAdvice<Object> {
     /**
      * 返回true表示要执行这个Advice
      *
-     * @param methodParameter
-     * @param aClass
-     * @return
+     * @param methodParameter methodParameter
+     * @param aClass          aClass
+     * @return 是否
      */
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
@@ -36,13 +36,13 @@ public class ResponseLogAdvice implements ResponseBodyAdvice<Object> {
     /**
      * 在输出流给客户端之前调用
      *
-     * @param body
-     * @param methodParameter
-     * @param mediaType
-     * @param aClass
-     * @param serverHttpRequest
-     * @param serverHttpResponse
-     * @return
+     * @param body               输出对象
+     * @param methodParameter    方法参数
+     * @param mediaType          响应类型
+     * @param aClass             消息转换类
+     * @param serverHttpRequest  请求上下文
+     * @param serverHttpResponse 响应上下文
+     * @return 输出对象
      */
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter methodParameter, MediaType mediaType,

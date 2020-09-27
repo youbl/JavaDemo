@@ -53,6 +53,18 @@ public class MainController {
         return ret;
     }
 
+    /**
+     * curl -X POST "http://localhost:8081/body" --data "{\"id\":-789,\"name\":\"empty\"}" -H "Content-Type: application/json"
+     */
+    @PostMapping("/body")
+    public ResultTest PostTest(@RequestBody ResultTest dto) {
+        if (dto.getId() < 0) {
+            dto.getName().toString();// 测试异常
+        }
+        dto.setName(dto.getName() + "-" + LocalDateTime.now());
+        return dto;
+    }
+
     @Data
     public static class ResultTest {
         private int id;

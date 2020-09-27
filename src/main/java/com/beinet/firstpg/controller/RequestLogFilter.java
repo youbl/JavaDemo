@@ -27,6 +27,12 @@ public class RequestLogFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // 不允许日志记录时，直接返回
+        if (!logger.isInfoEnabled()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         long startTime = System.currentTimeMillis();
         if (!(request instanceof ContentCachingRequestWrapper)) {
             // 解决 inputStream 只能读取一次的问题
@@ -37,28 +43,36 @@ public class RequestLogFilter extends OncePerRequestFilter {
             response = new ContentCachingResponseWrapper(response);
         }
 
+        Exception exception = null;
         try {
             filterChain.doFilter(request, response);
+        } catch (Exception exp) {
+            exception = exp;
+            throw exp;
         } finally {
             long latency = System.currentTimeMillis() - startTime;
-            doLog(request, response, latency);
-
+            doLog(request, response, latency, exception);
             repairResponse(response);
         }
     }
 
-    private void doLog(HttpServletRequest request, HttpServletResponse response, long latency) {
+    private void doLog(HttpServletRequest request, HttpServletResponse response, long latency, Exception exception) {
         StringBuilder sb = new StringBuilder();
         try {
-            sb.append(getRequestMsg(request));
+            getRequestMsg(request, sb);
 
-            sb.append("\n  响应 ")
+            sb.append("\n--响应 ")
                     .append(response.getStatus())
                     .append("  耗时 ")
                     .append(latency)
-                    .append("ms\n");
+                    .append("ms");
 
-            sb.append(getResponseMsg(response));
+            getResponseMsg(response, sb);
+
+            if (exception != null) {
+                sb.append("\n--异常 ")
+                        .append(exception.getMessage());
+            }
 
             logger.info(sb.toString());
         } catch (Exception exp) {
@@ -67,19 +81,20 @@ public class RequestLogFilter extends OncePerRequestFilter {
         }
     }
 
-    private static String getRequestMsg(HttpServletRequest request) throws IOException {
-        StringBuilder sb = new StringBuilder();
+    private static void getRequestMsg(HttpServletRequest request, StringBuilder sb) throws IOException {
         String query = request.getQueryString();
         if (StringUtils.isNotEmpty(query)) {
             query = "?" + query;
+        } else {
+            query = "";
         }
         sb.append(request.getMethod())
                 .append(" ")
                 .append(request.getRequestURL())
                 .append(query)
-                .append("\n  用户IP: ")
+                .append("\n--用户IP: ")
                 .append(request.getRemoteAddr())
-                .append("\n  请求Header:");
+                .append("\n--请求Header:");
 
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
@@ -91,14 +106,13 @@ public class RequestLogFilter extends OncePerRequestFilter {
         }
         String requestBody = readFromStream(request.getInputStream());
         if (StringUtils.isNotEmpty(requestBody)) {
-            sb.append("\n  请求体:\n")
+            sb.append("\n--请求体:\n")
                     .append(requestBody);
         }
-        return sb.toString();
     }
 
-    private static String getResponseMsg(HttpServletResponse response) throws UnsupportedEncodingException {
-        StringBuilder sb = new StringBuilder("  响应Header: ");
+    private static void getResponseMsg(HttpServletResponse response, StringBuilder sb) throws UnsupportedEncodingException {
+        sb.append("\n--响应Header: ");
         for (String header : response.getHeaderNames()) {
             sb.append("\n")
                     .append(header)
@@ -110,13 +124,12 @@ public class RequestLogFilter extends OncePerRequestFilter {
         if (wrapper != null) {
             String responseBody = transferFromByte(wrapper.getContentAsByteArray(), wrapper.getCharacterEncoding());
             if (StringUtils.isNotEmpty(responseBody)) {
-                sb.append("\n  响应Body:\n")
+                sb.append("\n--响应Body:\n")
                         .append(responseBody);
             } else {
-                sb.append("\n  无响应Body.");
+                sb.append("\n--无响应Body.");
             }
         }
-        return sb.toString();
     }
 
     private static void repairResponse(HttpServletResponse response) throws IOException {

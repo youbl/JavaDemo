@@ -54,7 +54,8 @@ public class MainController {
     }
 
     /**
-     * curl -X POST "http://localhost:8081/body" --data "{\"id\":-789,\"name\":\"empty\"}" -H "Content-Type: application/json"
+     * 测试异常的命令：
+     * curl -X POST "http://localhost:8081/body" --data "{\"id\":-789}" -H "Content-Type: application/json"
      */
     @PostMapping("/body")
     public ResultTest PostTest(@RequestBody ResultTest dto) {

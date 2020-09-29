@@ -1,7 +1,7 @@
 package com.beinet.firstpg.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -14,8 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 因为 RequestBodyAdvice 只支持带 RequestBody注解的方法，不支持GET或其它没有RequestBody注解的方法。
@@ -24,11 +27,16 @@ import java.util.Objects;
 @Configuration
 @Slf4j
 public class RequestLogFilter extends OncePerRequestFilter {
+    // (?i) 整个正则不区分大小写
+    // ^/actuator/ 以/actuator开头的请求
+    // \.(iCo|jpg|html|js|css)$ 以这些扩展名结束的请求
+    final static Pattern patternRequest = Pattern.compile("(?i)^/actuator/?|\\.(ico|jpg|png|bmp|txt|xml|html?|js|css)$");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 不允许日志记录时，直接返回
-        if (!logger.isInfoEnabled()) {
+        if (!logger.isInfoEnabled() || isNotApiRequest(request)) {
+            System.out.println(request.getRequestURL());
             filterChain.doFilter(request, response);
             return;
         }
@@ -54,6 +62,12 @@ public class RequestLogFilter extends OncePerRequestFilter {
             doLog(request, response, latency, exception);
             repairResponse(response);
         }
+    }
+
+    private boolean isNotApiRequest(HttpServletRequest request) {
+        String url = request.getRequestURI(); //request.getRequestURL() 带有域名，所以不用
+        Matcher matcher = patternRequest.matcher(url);
+        return matcher.find();
     }
 
     private void doLog(HttpServletRequest request, HttpServletResponse response, long latency, Exception exception) {
@@ -83,7 +97,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
 
     private static void getRequestMsg(HttpServletRequest request, StringBuilder sb) throws IOException {
         String query = request.getQueryString();
-        if (StringUtils.isNotEmpty(query)) {
+        if (!StringUtils.isEmpty(query)) {
             query = "?" + query;
         } else {
             query = "";
@@ -95,17 +109,21 @@ public class RequestLogFilter extends OncePerRequestFilter {
                 .append("\n--用户IP: ")
                 .append(request.getRemoteAddr())
                 .append("\n--请求Header:");
-
+        // 读取请求头信息
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String header = headerNames.nextElement();
-            sb.append("\n")
-                    .append(header)
-                    .append(" : ")
-                    .append(" ").append(request.getHeader(header));
+            Enumeration<String> values = request.getHeaders(header);
+            while (values.hasMoreElements()) {
+                sb.append("\n")
+                        .append(header)
+                        .append(" : ")
+                        .append(values.nextElement()).append("; ");
+            }
         }
+        // 读取请求体
         String requestBody = readFromStream(request.getInputStream());
-        if (StringUtils.isNotEmpty(requestBody)) {
+        if (!StringUtils.isEmpty(requestBody)) {
             sb.append("\n--请求体:\n")
                     .append(requestBody);
         }
@@ -114,16 +132,19 @@ public class RequestLogFilter extends OncePerRequestFilter {
     private static void getResponseMsg(HttpServletResponse response, StringBuilder sb) throws UnsupportedEncodingException {
         sb.append("\n--响应Header: ");
         for (String header : response.getHeaderNames()) {
-            sb.append("\n")
-                    .append(header)
-                    .append(" : ")
-                    .append(" ").append(response.getHeader(header));
+            Collection<String> values = response.getHeaders(header);//.stream().collect(Collectors.joining("; "));
+            for (String value : values) {
+                sb.append("\n")
+                        .append(header)
+                        .append(" : ")
+                        .append(value);
+            }
         }
-
+        // 读取响应体
         ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
         if (wrapper != null) {
             String responseBody = transferFromByte(wrapper.getContentAsByteArray(), wrapper.getCharacterEncoding());
-            if (StringUtils.isNotEmpty(responseBody)) {
+            if (!StringUtils.isEmpty(responseBody)) {
                 sb.append("\n--响应Body:\n")
                         .append(responseBody);
             } else {

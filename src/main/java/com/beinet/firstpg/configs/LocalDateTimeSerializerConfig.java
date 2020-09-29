@@ -25,7 +25,7 @@ public class LocalDateTimeSerializerConfig {
     @Bean
     public ObjectMapper getMapper() {
         JavaTimeModule module = new JavaTimeModule();
-        module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(getDateTimeFormatter()));
+        module.addDeserializer(LocalDateTime.class, new LocalDateTimeSerializerBeinet(getDateTimeFormatter()));
 
         return Jackson2ObjectMapperBuilder.json().modules(module)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).build();

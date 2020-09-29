@@ -23,8 +23,9 @@ public class ValidateController {
      * 注：此方法，如果校验不通过，会直接抛出异常，下面的 Demo2 方法不会。
      */
     @PostMapping("/validate")
-    public String Demo1(@Valid @RequestBody ValidateDto dto) {
-        return dto.toString();
+    public ValidateDto Demo1(@Valid @RequestBody ValidateDto dto) {
+        dto.setName(dto.getName() + " hello!!!");
+        return dto;
     }
 
     /**
@@ -39,22 +40,6 @@ public class ValidateController {
         return dto.toString();
     }
 
-    /**
-     * 参数校验示例3：
-     * 如果没有 BindingResult 参数，会直接抛出异常；
-     * BindingResult必须紧跟在Valid注解参数的下一个
-     */
-    @PostMapping("/validate3")
-    public String Demo3(@Valid @RequestBody ValidateDto dto, BindingResult result,
-                        @Valid @Min(value = 1, message = "id不能小于1") @RequestParam ValidateDto id, BindingResult result2) {
-        if (result.hasErrors()) {
-            return "DTO校验未通过哦： " + dto;
-        }
-        if (result2.hasErrors()) {
-            return "id校验未通过哦： " + id;
-        }
-        return dto.toString();
-    }
 
     /*
 常用校验注解:

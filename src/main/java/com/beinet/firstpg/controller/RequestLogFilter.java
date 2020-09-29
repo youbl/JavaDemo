@@ -1,6 +1,7 @@
 package com.beinet.firstpg.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,10 +28,28 @@ import java.util.regex.Pattern;
 @Configuration
 @Slf4j
 public class RequestLogFilter extends OncePerRequestFilter {
-    // (?i) 整个正则不区分大小写
-    // ^/actuator/ 以/actuator开头的请求
-    // \.(iCo|jpg|html|js|css)$ 以这些扩展名结束的请求
-    final static Pattern patternRequest = Pattern.compile("(?i)^/actuator/?|\\.(ico|jpg|png|bmp|txt|xml|html?|js|css)$");
+    // Filter内，无法注入Value或其它Bean，需要用@Bean形式生成 RequestLogFilter 实例
+    // @Value("${beinet.log.unlog-regex:}")
+    // private String unLogedRegex;
+
+    static Pattern patternRequest;
+
+    /**
+     * 构造函数，初始化正则用
+     * @param env 注入的上下文环境对象
+     */
+    public RequestLogFilter(org.springframework.core.env.Environment env) {
+        if (patternRequest == null) {
+            String unLogedRegex = env.getProperty("beinet.log.unlog-regex");
+            if (StringUtils.isEmpty(unLogedRegex)) {
+                // (?i) 整个正则不区分大小写
+                // ^/actuator/ 以/actuator开头的请求
+                // \.(iCo|jpg|html|js|css)$ 以这些扩展名结束的请求
+                unLogedRegex = "(?i)^/actuator/?|\\.(ico|jpg|png|bmp|txt|xml|html?|js|css)$";
+            }
+            patternRequest = Pattern.compile(unLogedRegex);
+        }
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

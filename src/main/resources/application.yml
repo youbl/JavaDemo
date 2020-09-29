@@ -1,4 +1,7 @@
 beinet:
+    log:
+        unlog-regex: "(?i)\\.(ico|jpg|png|bmp|txt|xml|html?|js|css)$"
+
     # 添加配置，演示http请求读取配置
     jsonUrl: www.kuaidi100.com
     userAgent: beine:#t 1.0
@@ -75,7 +78,7 @@ spring:
 
 
     rabbitmq:
-        host: 10.2.0.32
+        host: 127.0.0.1
         port: 5672
         username: beinet
         password: beinet123

@@ -154,17 +154,19 @@ public class RedisHelper {
     }
 
 
-    static class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
+    static class JsonRedisSerializer<T> implements RedisSerializer<T> {
 
         private Class<T> clazz;
 
-        public FastJsonRedisSerializer(Class<T> clazz) {
+        public JsonRedisSerializer(Class<T> clazz) {
             super();
             this.clazz = clazz;
         }
 
         @Override
         public byte[] serialize(T t) throws SerializationException {
+            if (t == null)
+                return new byte[0];
             try {
                 return SerializeHelper.serialize(t);
             } catch (JsonProcessingException e) {
@@ -175,6 +177,8 @@ public class RedisHelper {
 
         @Override
         public T deserialize(byte[] bytes) throws SerializationException {
+            if (bytes == null)
+                return null;
             try {
                 return SerializeHelper.deserialize(bytes, clazz);
             } catch (IOException e) {
@@ -240,7 +244,7 @@ public class RedisHelper {
         redis1.setKeySerializer(keySerializer);
         redis1.setHashKeySerializer(keySerializer);
 
-        RedisSerializer valSerializer = new FastJsonRedisSerializer<>(Object.class);
+        RedisSerializer valSerializer = new JsonRedisSerializer<>(Object.class);
         redis1.setValueSerializer(valSerializer);
         redis1.setHashValueSerializer(valSerializer);
     }

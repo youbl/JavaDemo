@@ -63,16 +63,16 @@ public class FileHelper {
             encoding = defaultEncoding;
         StringBuilder sb = new StringBuilder();
         try (InputStreamReader reader = new InputStreamReader(is, encoding)) {
-            // readLine不合适，无法确定换行符是 \n还是\r\n
+            // readLine返回数据不包含换行符，无法确定换行符是 \n还是\r\n，所以不适用
             // BufferedReader bufferedReader = new BufferedReader(reader)
             // while ((line = bufferedReader.readLine()) != null)
             int c;
-            while ((c = reader.read()) != -1)
-                sb.append((char) c);
+            char[] data = new char[1024]; // 用数组读取性能更高
+            while ((c = reader.read(data)) != -1)
+                sb.append(new String(data, 0, c));
         }
         return sb.toString();
     }
-
     // </editor-fold>
 
     // <editor-fold desc="写方法">

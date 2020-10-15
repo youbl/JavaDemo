@@ -1,5 +1,6 @@
 package com.beinet.firstpg.configs;
 
+import com.beinet.firstpg.httpDemo.MyFeignClient;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
 import feign.*;
 import feign.codec.ErrorDecoder;
@@ -7,16 +8,24 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.buf.StringUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
 @Configuration
-public class FeignConfiguration  {
+public class FeignConfiguration {
 
     @Bean
-    public ErrorDecoder errorDecoder(){
-        return (methodKey, response)->{
+    public ErrorDecoder errorDecoder() {
+        return (methodKey, response) -> {
             int status = response.status();
             if (status >= 300 && status < 400) {
 //                String body = "Redirect found";
@@ -32,7 +41,7 @@ public class FeignConfiguration  {
     }
 
     @Data
-    @EqualsAndHashCode(callSuper=false)
+    @EqualsAndHashCode(callSuper = false)
     static class FeignBadResponseWrapper extends HystrixBadRequestException {
         private final int status;
         private final HttpHeaders headers;
@@ -73,4 +82,28 @@ public class FeignConfiguration  {
 //    public Retryer feignRetryer() {
 //        return new Retryer.Default();
 //    }
+
+
+    @Bean
+    @ConditionalOnProperty("logging.level.com.beinet.firstpg.httpDemo.MyFeignClient")
+    Client getClient() throws NoSuchAlgorithmException, KeyManagementException {
+        // 忽略SSL校验
+        SSLContext ctx = SSLContext.getInstance("SSL");
+        X509TrustManager tm = new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
+        ctx.init(null, new TrustManager[]{tm}, null);
+        return new MyFeignClient(ctx.getSocketFactory(), (hostname, sslSession) -> true);
+    }
 }

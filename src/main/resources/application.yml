@@ -124,6 +124,7 @@ logging:
         # 下面这个配置，指示com.beinet.firstpg.jobs 要输出debug及以上级别的日志。注：只能是包名或类名，不能是方法
         com.beinet.firstpg.jobs: debug
         com.beinet.firstpg.jobs.ScheduleJobs.ScheduleJobForLogTest1: trace
+        com.beinet.firstpg.httpDemo.MyFeignClient: debug
 
 feign:
     client:

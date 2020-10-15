@@ -20,6 +20,10 @@ public class DemoInvocationHandler implements InvocationHandler {
         String methodName = method.getName();
         if (methodName.equals("toString"))
             return toString(proxy);
+        if (methodName.equals("equals"))
+            return equals(proxy, args);
+        if (methodName.equals("hashCode"))
+            return hashCode(proxy);
 
         System.out.println("代理开始...");
         System.out.println("被代理类: " + clazz);
@@ -47,6 +51,21 @@ public class DemoInvocationHandler implements InvocationHandler {
         if (!(target instanceof Class))
             return String.valueOf(target);
         return clazz.getName();
+    }
+
+    private boolean equals(Object proxy, Object[] args) {
+        if (args == null || args.length != 1)
+            return false;
+
+        if (!(target instanceof Class))
+            return target.equals(args[0]);
+        return clazz.equals(args[0]);
+    }
+
+    private int hashCode(Object proxy) {
+        if (!(target instanceof Class))
+            return target.hashCode();
+        return clazz.hashCode();
     }
 
     public static <T> T getProxy(Object obj) {

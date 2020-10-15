@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * 因为 RequestBodyAdvice 只支持带 RequestBody注解的方法，不支持GET或其它没有RequestBody注解的方法。
  * 所以要用Filter
  */
-@Configuration
+//@Configuration
 @Slf4j
 public class RequestLogFilter extends OncePerRequestFilter {
     // Filter内，无法注入Value或其它Bean，需要用@Bean形式生成 RequestLogFilter 实例

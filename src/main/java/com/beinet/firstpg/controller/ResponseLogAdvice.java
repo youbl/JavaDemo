@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@ControllerAdvice
+//@ControllerAdvice
 public class ResponseLogAdvice implements ResponseBodyAdvice<Object> {
     private static ObjectMapper mapper = new ObjectMapper();
 

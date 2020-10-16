@@ -21,7 +21,17 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 @Configuration
+@Data
 public class FeignConfiguration {
+    private int idx = 123;
+
+    public FeignConfiguration() {
+
+    }
+
+    public FeignConfiguration(int idx) {
+        this.idx = idx;
+    }
 
     @Bean
     public ErrorDecoder errorDecoder() {

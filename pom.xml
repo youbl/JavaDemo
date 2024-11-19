@@ -39,7 +39,7 @@ https://github.com/spring-projects/spring-amqp-samples
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>2.6.3</version>
+            <version>3.7.1</version>
         </dependency>
 
         <dependency>
